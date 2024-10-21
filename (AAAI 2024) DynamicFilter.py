@@ -110,10 +110,14 @@ class DynamicFilter(nn.Module):
         x = self.pwconv2(x)
         return x
 
-
 if __name__ == '__main__':
-    block = DynamicFilter(32, size=64) # size==H,W
-    input = torch.rand(3, 64, 64, 32) #输入 B H W C
-    output = block(input)
-    print(input.size())
-    print(output.size())
+    block = DynamicFilter(32, size=64)  # size==H,W
+
+    # 若input形状为B C H W，先用下面代码变换张量形状
+    input = torch.rand(3, 32, 64, 64)   # 输入 B C H W
+    input_bhwc = input.permute(0, 2, 3, 1)  # B H W C
+
+    output = block(input_bhwc)
+
+    output = output.permute(0, 3, 1, 2)  # B C H W
+    print(output.size())  # 输出的形状
