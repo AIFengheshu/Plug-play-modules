@@ -113,7 +113,7 @@ class DynamicFilter(nn.Module):
 
 if __name__ == '__main__':
     block = DynamicFilter(32, size=64) # size==H,W
-    input = torch.rand(3, 64, 64, 32) #输入 B C H W
+    input = torch.rand(3, 64, 64, 32) #输入 B H W C
     output = block(input)
     print(input.size())
     print(output.size())
