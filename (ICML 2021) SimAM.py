@@ -1,41 +1,35 @@
-# ---------------------------------------
-# Simam: A simple, parameter-free attention module for convolutional neural networks (ICML 2021)
-# Github:https://github.com/ZjjConan/SimAM
-# 微信公众号：AI缝合术
-"""
-2024年全网最全即插即用模块,全部免费!包含各种卷积变种、最新注意力机制、特征融合模块、上下采样模块，
-适用于人工智能(AI)、深度学习、计算机视觉(CV)领域，适用于图像分类、目标检测、实例分割、语义分割、
-单目标跟踪(SOT)、多目标跟踪(MOT)、红外与可见光图像融合跟踪(RGBT)、图像去噪、去雨、去雾、去模糊、超分等任务，
-模块库持续更新中......
-https://github.com/AIFengheshu/Plug-play-modules
-"""
-# ---------------------------------------
 import torch
 import torch.nn as nn
-from thop import profile
+from thop import profile  # 用于计算模型的FLOPS和参数量
 
 
 class Simam_module(torch.nn.Module):
     def __init__(self, e_lambda=1e-4):
         super(Simam_module, self).__init__()
-        self.act = nn.Sigmoid()
-        self.e_lambda = e_lambda
+        self.act = nn.Sigmoid()  # 使用Sigmoid激活函数
+        self.e_lambda = e_lambda  # 防止除零的平滑因子
 
     def forward(self, x):
+        # 获取输入的批次大小、通道数、高度和宽度
         b, c, h, w = x.size()
-        n = w * h - 1
-        x_minus_mu_square = (x - x.mean(dim=[2, 3], keepdim=True)).pow(2)
-        y = x_minus_mu_square / (4 * (x_minus_mu_square.sum(dim=[2, 3], keepdim=True) / n + self.e_lambda)) + 0.5
+        n = w * h - 1  # 计算有效像素数（去掉一个像素）
 
+        # 计算每个特征点与其局部均值的平方差
+        x_minus_mu_square = (x - x.mean(dim=[2, 3], keepdim=True)).pow(2)
+
+        # 计算能量值y
+        y = x_minus_mu_square / (4 * (x_minus_mu_square.sum(dim=[2, 3], keepdim=True) / n + self.e_lambda)) + 0.5
+        
+        # 通过Sigmoid激活函数生成注意力权重，并与输入特征图相乘
         return x * self.act(y)
 
 
-# 无参注意力机制    输入 N C H W,  输出 N C H W
+# 无参注意力机制，输入 N C H W，输出 N C H W
 if __name__ == '__main__':
-    model = Simam_module().cuda()
-    x = torch.randn(1, 3, 64, 64).cuda()
-    y = model(x)
-    print(y.size())
-    flops, params = profile(model, (x,))
-    print(flops / 1e9)
-    print(params)
+    model = Simam_module().cuda()  # 实例化SimAM模块并转移到GPU
+    x = torch.randn(1, 3, 64, 64).cuda()  # 创建一个随机输入张量
+    y = model(x)  # 通过模型前向传播获取输出
+    print(y.size())  # 打印输出的尺寸
+    flops, params = profile(model, (x,))  # 计算模型的FLOPS和参数量
+    print(flops / 1e9)  # 打印FLOPS，单位为十亿
+    print(params)  # 打印模型的参数数量
