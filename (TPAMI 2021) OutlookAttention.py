@@ -1,5 +1,5 @@
 # ---------------------------------------
-# 论文: VOLO: Vision Outlooker for Visual Recognition (TPAMI 2021)
+# 论文: VOLO: Vision Outlooker for Visual Recognition (TPAMI 2022)
 # 论文链接：https://arxiv.org/pdf/2106.13112
 # Github地址: https://github.com/sail-sg/volo
 # 微信公众号：AI缝合术
