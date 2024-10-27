@@ -10,7 +10,7 @@
 
 地址：https://arxiv.org/pdf/1811.11168
 
-![image](https://github.com/user-attachments/assets/4da112b7-6e8a-46e4-b23e-0183cc6d6913)
+![image](https://github.com/user-attachments/assets/5dcb2a89-bedd-49fc-9f22-99e4ca77406b)
 
 论文解读：[可变形卷积（DCNv2），即插即用，直接替换普通卷积，助力模型涨点！增强网络特征提取能力！](https://mp.weixin.qq.com/s/ptGGWtCmsJqxKLGAbYHwLA)
 
@@ -20,6 +20,6 @@
 
 地址：https://arxiv.org/pdf/1811.11168
 
-![image](https://github.com/user-attachments/assets/5bcd8c5b-9a90-4eb0-a8cf-efff2261c072)
+![image](https://github.com/user-attachments/assets/547dbf5d-53aa-4f22-b542-89135369830c)
 
 论文解读：[【ECCV 2024】大感受野的小波卷积，即插即用，显著提高CNN的有效感受野](https://mp.weixin.qq.com/s/I3Qh1yPWbr9sqEql1DAsjg)
