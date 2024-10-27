@@ -1,7 +1,7 @@
 import torch
 from torch import nn
 #GitHub地址：https://github.com/YOLOonMe/EMA-attention-module
-#论文地址：https://arxiv.org/abs/2305.13563v2
+#论文地址：https://arxiv.org/pdf/2305.13563v2
 # 微信公众号：AI缝合术
 """
 2024年全网最全即插即用模块,全部免费!包含各种卷积变种、最新注意力机制、特征融合模块、上下采样模块，
