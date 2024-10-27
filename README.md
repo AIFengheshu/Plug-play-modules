@@ -34,3 +34,13 @@
 ![image](https://github.com/user-attachments/assets/7fc4c6e4-d89a-4d3d-97d5-1e02e0974d94)
 
 论文解读：[【TPAMI 2024】即插即用的FreqFusion特征融合模块，语义分割、目标检测、实例分割和全景分割统统涨点！](https://mp.weixin.qq.com/s/u5gmg66VnFGzKCiMTHGyRw)
+
+### 4. [缩放点积注意力 (arXiv 2023) ScaledDotProductAttention.py](https://github.com/AIFengheshu/Plug-play-modules/blob/main/(arXiv%202023)%20ScaledDotProductAttention.py)
+
+题目：Attention Is All You Need
+
+地址：https://arxiv.org/pdf/1706.03762
+
+![image](https://github.com/user-attachments/assets/e467c9aa-f991-413f-9055-64dd4f934b01)
+
+论文解读：[【被引13w+】Scaled Dot-Product Attention（缩放点积注意力），被引最高的注意力机制](https://mp.weixin.qq.com/s/lAxZmKu8jgO-kALtv-uBgg)
