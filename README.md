@@ -91,4 +91,32 @@ SimAM:一种用于卷积神经网络的简单、无参数的注意力模块
 
 论文解读：[【ICML 2021】无参数注意力模块SimAM，即插即用，不超过10行代码，有效涨点！](https://mp.weixin.qq.com/s/OI5RYlm100Lpiqjxj1e0-g)
 
+### 9. [部分卷积 (CVPR 2023) PConv.py](https://github.com/AIFengheshu/Plug-play-modules/blob/main/(CVPR%202023)%20PConv.py)
+
+论文题目：Run, Don’t Walk: Chasing Higher FLOPS for Faster Neural Networks
+
+跑起来！不要走：追求更高FLOPS以实现更快的神经网络
+
+论文链接：https://arxiv.org/pdf/2303.03667
+
+![image](https://github.com/user-attachments/assets/8794b17f-f9dd-4ad5-85aa-05a32299e51e)
+
+论文解读：[【CVPR 2023】部分卷积（PConv），简单有效，即插即用，快速涨点](https://mp.weixin.qq.com/s/6tss5ZaOoolnzfbK4eKm-A)
+
+### 10. [大选择核模块 (IJCV 2024) LSK.py](https://github.com/AIFengheshu/Plug-play-modules/blob/main/(IJCV%202024)%20LSK.py)
+
+论文题目：LSKNet: A Foundation Lightweight Backbone forRemote Sensing
+
+中文题目: LSKNet: 一种用于遥感的基础轻量级骨干网络论文
+
+链接：https://arxiv.org/pdf/2403.11735
+
+所属机构: 南开大学天津，湖南先进技术研发研究院长沙，深圳福田NKAIRI
+
+关键词： 遥感，CNN骨干，大核，注意力，目标检测，语义分割
+
+![image](https://github.com/user-attachments/assets/94a9f778-be6a-4193-a5f0-671c82669cb6)
+
+论文解读：[【IJCV 2024】大选择核模块LSK，可当作卷积块进行替换，即插即用，极大增加感受野](https://mp.weixin.qq.com/s/G9gLLbfUV0FzRn-vczREQA)
+
 
