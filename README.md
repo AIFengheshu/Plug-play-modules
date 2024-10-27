@@ -119,4 +119,17 @@ SimAM:一种用于卷积神经网络的简单、无参数的注意力模块
 
 论文解读：[【IJCV 2024】大选择核模块LSK，可当作卷积块进行替换，即插即用，极大增加感受野](https://mp.weixin.qq.com/s/G9gLLbfUV0FzRn-vczREQA)
 
+### 11. [(TPAMI 2021) OutlookAttention.py](https://github.com/AIFengheshu/Plug-play-modules/blob/main/(TPAMI%202021)%20OutlookAttention.py)
+
+论文题目：VOLO: Vision Outlooker for Visual Recognition
+
+中文题目:  VOLO：视觉识别的视觉展望器
+
+论文链接：https://arxiv.org/pdf/2106.13112
+
+所属机构: Sea AI Lab和新加坡国立大学
+
+![image](https://github.com/user-attachments/assets/c76d2d73-c6eb-451f-89c8-69a8b2b55c75)
+
+论文解读：[【TPAMI 2022】Outlook Attention，即插即用，捕捉细节和局部特征，助力模型涨点](https://mp.weixin.qq.com/s/v4AWmS0dP4vyTmvtoIPxqA)
 
