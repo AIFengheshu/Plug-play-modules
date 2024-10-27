@@ -2,6 +2,11 @@ import torch
 import torch.nn as nn
 from thop import profile  # 用于计算模型的FLOPS和参数量
 
+# 论文题目：SimAM: A Simple, Parameter-Free Attention Module for Convolutional Neural Networks 
+
+# SimAM:一种用于卷积神经网络的简单、无参数的注意力模块
+
+# 论文链接：http://proceedings.mlr.press/v139/yang21o/yang21o.pdf
 
 class Simam_module(torch.nn.Module):
     def __init__(self, e_lambda=1e-4):
