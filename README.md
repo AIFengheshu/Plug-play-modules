@@ -15,7 +15,7 @@
 
 论文解读：[可变形卷积（DCNv2），即插即用，直接替换普通卷积，助力模型涨点！增强网络特征提取能力！](https://mp.weixin.qq.com/s/ptGGWtCmsJqxKLGAbYHwLA)
 
-### 2. [小波卷积 (CVPR 2017) DWConv.py](https://github.com/AIFengheshu/Plug-play-modules/blob/main/(CVPR%202017)%20DWConv.py)
+### 2. [小波卷积 (ECCV 2024) WTConv.py](https://github.com/AIFengheshu/Plug-play-modules/blob/main/(ECCV%202024)%20WTConv.py)
 
 题目：Wavelet Convolutions for Large Receptive Fields
 
