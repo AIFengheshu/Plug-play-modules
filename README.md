@@ -67,4 +67,28 @@
 
 论文解读：[【AAAI 2024】计算复杂度更低，基于FFT的动态滤波器模块，即插即用](https://mp.weixin.qq.com/s/Kv_cc31-n27LuSgt10MBTA)
 
+### 7. [高效多尺度注意力 (ICCASSP 2023) EMA.py](https://github.com/AIFengheshu/Plug-play-modules/blob/main/(ICCASSP%202023)%20EMA.py)
+
+题目：Efficient Multi-Scale Attention Module with Cross-Spatial Learning
+
+中文题目：高效的跨空间学习多尺度注意力模块
+
+地址：https://arxiv.org/pdf/2305.13563v2
+
+![image](https://github.com/user-attachments/assets/b308683b-67d5-4a26-bdd9-ea2bd149e3bf)
+
+论文解读：[【ICCASSP 2023】即插即用的高效多尺度注意力EMA，战胜SE、CBAM、SA、CA等注意力](https://mp.weixin.qq.com/s/F7G1LvO4N_HX5wooLztCew)
+
+### 8. [无参数注意力模块 (ICML 2021) SimAM.py](https://github.com/AIFengheshu/Plug-play-modules/blob/main/(ICML%202021)%20SimAM.py)
+
+论文题目：SimAM: A Simple, Parameter-Free Attention Module for Convolutional Neural Networks 
+
+SimAM:一种用于卷积神经网络的简单、无参数的注意力模块
+
+论文链接：http://proceedings.mlr.press/v139/yang21o/yang21o.pdf
+
+![image](https://github.com/user-attachments/assets/a8531872-1241-4027-bbcf-656e57e43643)
+
+论文解读：[【ICML 2021】无参数注意力模块SimAM，即插即用，不超过10行代码，有效涨点！](https://mp.weixin.qq.com/s/OI5RYlm100Lpiqjxj1e0-g)
+
 
