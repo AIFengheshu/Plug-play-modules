@@ -55,3 +55,16 @@
 
 论文解读：[【ECCV 2024】新注意力范式——Agent Attention，整合Softmax与线性注意力](https://mp.weixin.qq.com/s/giFUFLCCA5WLHnq_kF3NpQ)
 
+### 6. [动态滤波模块 (AAAI 2024) DynamicFilter.py](https://github.com/AIFengheshu/Plug-play-modules/blob/main/(AAAI%202024)%20DynamicFilter.py)
+
+题目：FFT-based Dynamic Token Mixer for Vision
+
+中文题目：基于FFT的动态令牌混合器在视觉中的应用
+
+地址：https://arxiv.org/pdf/2303.03932
+
+![image](https://github.com/user-attachments/assets/517e55f9-8d0e-480e-9d07-d4ef81fe43c3)
+
+论文解读：[【AAAI 2024】计算复杂度更低，基于FFT的动态滤波器模块，即插即用](https://mp.weixin.qq.com/s/Kv_cc31-n27LuSgt10MBTA)
+
+
