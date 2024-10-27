@@ -133,3 +133,14 @@ SimAM:一种用于卷积神经网络的简单、无参数的注意力模块
 
 论文解读：[【TPAMI 2022】Outlook Attention，即插即用，捕捉细节和局部特征，助力模型涨点](https://mp.weixin.qq.com/s/v4AWmS0dP4vyTmvtoIPxqA)
 
+### 12. [Haar小波下采样 (PR2023) HaarWDownsampling.py](https://github.com/AIFengheshu/Plug-play-modules/blob/main/(PR2023)%20HaarWDownsampling.py)
+
+论文题目：Haar wavelet downsampling: A simple but effective downsampling module for semantic segmentation
+
+中文题目:  Haar小波下采样：一个简单但有效的语义分割下采样模块
+
+论文链接：https://www.sciencedirect.com/science/article/pii/S0031320323005174
+
+![image](https://github.com/user-attachments/assets/7ae07fd3-b19b-4e37-9beb-99fdaae996d8)
+
+论文解读：[【PR 2023】Haar小波下采样，即插即用，几行代码，简单有效提高语义分割准确性](https://mp.weixin.qq.com/s/n1YQeSN2dOcB8cIm3RLXOw)
