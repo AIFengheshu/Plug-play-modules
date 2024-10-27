@@ -44,3 +44,14 @@
 ![image](https://github.com/user-attachments/assets/e467c9aa-f991-413f-9055-64dd4f934b01)
 
 论文解读：[【被引13w+】Scaled Dot-Product Attention（缩放点积注意力），被引最高的注意力机制](https://mp.weixin.qq.com/s/lAxZmKu8jgO-kALtv-uBgg)
+
+### 5. [代理注意力 (ECCV 2024) Agent-Attention.py](https://github.com/AIFengheshu/Plug-play-modules/blob/main/(ECCV%202024)%20Agent-Attention.py)
+
+题目：Agent Attention: On the Integration of Softmax and Linear Attention
+
+地址：https://arxiv.org/pdf/2312.08874
+
+![image](https://github.com/user-attachments/assets/a7b3c954-30af-4a02-bf06-1c64a04d87bc)
+
+论文解读：[【ECCV 2024】新注意力范式——Agent Attention，整合Softmax与线性注意力](https://mp.weixin.qq.com/s/giFUFLCCA5WLHnq_kF3NpQ)
+
