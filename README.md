@@ -144,3 +144,21 @@ SimAM:一种用于卷积神经网络的简单、无参数的注意力模块
 ![image](https://github.com/user-attachments/assets/7ae07fd3-b19b-4e37-9beb-99fdaae996d8)
 
 论文解读：[【PR 2023】Haar小波下采样，即插即用，几行代码，简单有效提高语义分割准确性](https://mp.weixin.qq.com/s/n1YQeSN2dOcB8cIm3RLXOw)
+
+### 13. [空间和通道协同注意力 (arXiv 2024) SCSA.py](https://github.com/AIFengheshu/Plug-play-modules/blob/main/(arXiv%202024)%20SCSA.py)
+
+论文题目：SCSA: Exploring the Synergistic Effects Between Spatial and Channel Attention
+
+中文题目:  SCSA: 探索空间注意力和通道注意力之间的协同效应
+
+论文链接：https://arxiv.org/pdf/2407.05128
+
+所属机构：浙江师范大学计算机科学与技术学院，杭州人工智能研究所，北京极客智能科技有限公司
+
+关键词：多语义信息，语义差异，空间注意力，通道注意力，协同效应
+
+![image](https://github.com/user-attachments/assets/182f1a60-496b-4607-a512-f9abc8c9a5fd)
+
+
+论文解读：[【arXiv 2024】最新！空间和通道协同注意力SCSA，即插即用，分类、检测、分割涨点！](https://mp.weixin.qq.com/s/RK-bVHt8-D5dCUI1yJ5NpA)
+
