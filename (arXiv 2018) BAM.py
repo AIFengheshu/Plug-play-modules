@@ -1,90 +1,72 @@
-import numpy as np
 import torch
-from torch import nn
-from torch.nn import init
+import torch.nn as nn
+import torch.nn.functional as F
 
-# 论文地址：https://arxiv.org/pdf/1807.06514
-# 论文：BAM: Bottleneck Attention Module
+# 论文题目：BAM: Bottleneck Attention Module
+# 中文题目:  BAM：瓶颈注意力模块
+# 论文链接：http://bmvc2018.org/contents/papers/0092.pdf
+# 官方github：https://github.com/Jongchan/attention-module
+# 所属机构：Lunit Inc., 韩国; 韩国科学技术院(KAIST), 韩国; Adobe Research, 美国
+# 关键词： 瓶颈注意力模块, 深度神经网络, 注意力机制, 图像分类, 目标检测
 # 微信公众号：AI缝合术
-"""
-2024年全网最全即插即用模块,全部免费!包含各种卷积变种、最新注意力机制、特征融合模块、上下采样模块，
-适用于人工智能(AI)、深度学习、计算机视觉(CV)领域，适用于图像分类、目标检测、实例分割、语义分割、
-单目标跟踪(SOT)、多目标跟踪(MOT)、红外与可见光图像融合跟踪(RGBT)、图像去噪、去雨、去雾、去模糊、超分等任务，
-模块库持续更新中......
-https://github.com/AIFengheshu/Plug-play-modules
-"""
 
 class Flatten(nn.Module):
     def forward(self,x):
         return x.view(x.shape[0],-1)
 
 class ChannelAttention(nn.Module):
-    def __init__(self,channel,reduction=16,num_layers=3):
+    def __init__(self, channel, reduction=16, num_layers=3):
         super().__init__()
-        self.avgpool=nn.AdaptiveAvgPool2d(1)
-        gate_channels=[channel]
-        gate_channels+=[channel//reduction]*num_layers
-        gate_channels+=[channel]
+        self.avgpool = nn.AdaptiveAvgPool2d(1)
+        gate_channels = [channel]
+        gate_channels += [channel // reduction] * num_layers
+        gate_channels += [channel]
 
+        self.ca = nn.Sequential()
+        self.ca.add_module('flatten', Flatten())
+        for i in range(len(gate_channels) - 2):
+            self.ca.add_module('fc%d' % i, nn.Linear(gate_channels[i], gate_channels[i + 1]))
+            self.ca.add_module('relu%d' % i, nn.ReLU())
+        self.ca.add_module('last_fc', nn.Linear(gate_channels[-2], gate_channels[-1]))
 
-        self.ca=nn.Sequential()
-        self.ca.add_module('flatten',Flatten())
-        for i in range(len(gate_channels)-2):
-            self.ca.add_module('fc%d'%i,nn.Linear(gate_channels[i],gate_channels[i+1]))
-            self.ca.add_module('bn%d'%i,nn.BatchNorm1d(gate_channels[i+1]))
-            self.ca.add_module('relu%d'%i,nn.ReLU())
-        self.ca.add_module('last_fc',nn.Linear(gate_channels[-2],gate_channels[-1]))
-        
-
-    def forward(self, x) :
-        res=self.avgpool(x)
-        res=self.ca(res)
-        res=res.unsqueeze(-1).unsqueeze(-1).expand_as(x)
+    def forward(self, x):
+        res = self.avgpool(x)
+        res = self.ca(res)
+        res = res.unsqueeze(-1).unsqueeze(-1).expand_as(x)
         return res
 
 class SpatialAttention(nn.Module):
-    def __init__(self,channel,reduction=16,num_layers=3,dia_val=2):
+    def __init__(self, channel, reduction=16, num_layers=3, dia_val=2):
         super().__init__()
-        self.sa=nn.Sequential()
-        self.sa.add_module('conv_reduce1',nn.Conv2d(kernel_size=1,in_channels=channel,out_channels=channel//reduction))
-        self.sa.add_module('bn_reduce1',nn.BatchNorm2d(channel//reduction))
-        self.sa.add_module('relu_reduce1',nn.ReLU())
+        self.sa = nn.Sequential()
+        self.sa.add_module('conv_reduce1', nn.Conv2d(kernel_size=1, in_channels=channel, out_channels=channel // reduction))
+        self.sa.add_module('bn_reduce1', nn.BatchNorm2d(channel // reduction))
+        self.sa.add_module('relu_reduce1', nn.ReLU())
         for i in range(num_layers):
-            self.sa.add_module('conv_%d'%i,nn.Conv2d(kernel_size=3,in_channels=channel//reduction,out_channels=channel//reduction,padding=1,dilation=dia_val))
-            self.sa.add_module('bn_%d'%i,nn.BatchNorm2d(channel//reduction))
-            self.sa.add_module('relu_%d'%i,nn.ReLU())
-        self.sa.add_module('last_conv',nn.Conv2d(channel//reduction,1,kernel_size=1))
+            self.sa.add_module('conv_%d' % i, nn.Conv2d(
+                kernel_size=3,
+                in_channels=channel // reduction,
+                out_channels=channel // reduction,
+                padding=1,
+                dilation=dia_val
+            ))
+            self.sa.add_module('bn_%d' % i, nn.BatchNorm2d(channel // reduction))
+            self.sa.add_module('relu_%d' % i, nn.ReLU())
+        self.sa.add_module('last_conv', nn.Conv2d(channel // reduction, 1, kernel_size=1))
 
-    def forward(self, x) :
-        res=self.sa(x)
-        res=res.expand_as(x)
+    def forward(self, x):
+        res = self.sa(x)
+        # 使用插值调整大小
+        res = F.interpolate(res, size=x.shape[2:], mode='bilinear', align_corners=False)
+        res = res.expand_as(x)
         return res
 
-
-
-
 class BAMBlock(nn.Module):
-
     def __init__(self, channel=512,reduction=16,dia_val=2):
         super().__init__()
         self.ca=ChannelAttention(channel=channel,reduction=reduction)
         self.sa=SpatialAttention(channel=channel,reduction=reduction,dia_val=dia_val)
         self.sigmoid=nn.Sigmoid()
-
-
-    def init_weights(self):
-        for m in self.modules():
-            if isinstance(m, nn.Conv2d):
-                init.kaiming_normal_(m.weight, mode='fan_out')
-                if m.bias is not None:
-                    init.constant_(m.bias, 0)
-            elif isinstance(m, nn.BatchNorm2d):
-                init.constant_(m.weight, 1)
-                init.constant_(m.bias, 0)
-            elif isinstance(m, nn.Linear):
-                init.normal_(m.weight, std=0.001)
-                if m.bias is not None:
-                    init.constant_(m.bias, 0)
 
     def forward(self, x):
         b, c, _, _ = x.size()
@@ -94,11 +76,13 @@ class BAMBlock(nn.Module):
         out=(1+weight)*x
         return out
 
-
-if __name__ == '__main__':
-    input=torch.randn(50,512,7,7)
-    bam = BAMBlock(channel=512,reduction=16,dia_val=2)
-    output=bam(input)
-    print(output.shape)
-
-    
+if __name__ == "__main__": 
+    bam = BAMBlock(channel=32)
+    # 随机生成输入张量 (B, C, H, W)
+    input_tensor = torch.rand(1, 32, 256, 256)
+    # 打印输入张量的形状
+    print(f"输入张量的形状: {input_tensor.shape}")
+    # 前向传播
+    output_tensor = bam(input_tensor)
+    # 打印输出张量的形状
+    print(f"输出张量的形状: {output_tensor.shape}")
