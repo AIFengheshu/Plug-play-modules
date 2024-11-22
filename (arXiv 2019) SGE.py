@@ -1,22 +1,20 @@
-import numpy as np
 import torch
 from torch import nn
 from torch.nn import init
 
-# 论文地址：https://arxiv.org/pdf/1905.09646
-# 论文：Spatial Group-wise Enhance: Improving Semantic Feature Learning in Convolutional Networks
-# 微信公众号：AI缝合术
-"""
-2024年全网最全即插即用模块,全部免费!包含各种卷积变种、最新注意力机制、特征融合模块、上下采样模块，
-适用于人工智能(AI)、深度学习、计算机视觉(CV)领域，适用于图像分类、目标检测、实例分割、语义分割、
-单目标跟踪(SOT)、多目标跟踪(MOT)、红外与可见光图像融合跟踪(RGBT)、图像去噪、去雨、去雾、去模糊、超分等任务，
-模块库持续更新中......
-https://github.com/AIFengheshu/Plug-play-modules
-"""
+# 论文题目：Spatial Group-wise Enhance: Improving Semantic
+# Feature Learning in Convolutional Networks
+
+# 中文题目:  空间分组增强：在卷积网络中改进语义特征学习
+# 论文链接：https://arxiv.org/pdf/1905.09646
+# 官方github：https://github.com/implus/PytorchInsight
+# 所属机构：南京理工大学PCALab、Momenta、清华大学
+# 关键词：卷积神经网络、注意力机制、图像分类、目标检测、特征增强
+
+# 微信公众号：AI缝合术 https://github.com/AIFengheshu/Plug-play-modules
 
 class SpatialGroupEnhance(nn.Module):
-
-    def __init__(self, groups):
+    def __init__(self, groups=8):
         super().__init__()
         self.groups=groups
         self.avg_pool = nn.AdaptiveAvgPool2d(1)
@@ -24,7 +22,6 @@ class SpatialGroupEnhance(nn.Module):
         self.bias=nn.Parameter(torch.zeros(1,groups,1,1))
         self.sig=nn.Sigmoid()
         self.init_weights()
-
 
     def init_weights(self):
         for m in self.modules():
@@ -56,14 +53,10 @@ class SpatialGroupEnhance(nn.Module):
         t=t.view(b*self.groups,1,h,w) #bs*g,1,h*w
         x=x*self.sig(t)
         x=x.view(b,c,h,w)
-
         return x 
 
-
 if __name__ == '__main__':
-    input=torch.randn(50,512,7,7)
+    input=torch.randn(1,32,256,256)
     sge = SpatialGroupEnhance(groups=8)
     output=sge(input)
     print(output.shape)
-
-    
