@@ -1,145 +1,151 @@
-'''
-Description:
-Date: 2023-07-21 14:36:27
-LastEditTime: 2023-07-27 18:41:47
-FilePath: /chengdongzhou/ScConv.py
-'''
 import torch
-import torch.nn.functional as F
 import torch.nn as nn
-#Github地址：https://github.com/cheng-haha/ScConv
-#论文地址：https://openaccess.thecvf.com/content/CVPR2023/papers/Li_SCConv_Spatial_and_Channel_Reconstruction_Convolution_for_Feature_Redundancy_CVPR_2023_paper.pdf
-# 微信公众号：AI缝合术
-"""
-2024年全网最全即插即用模块,全部免费!包含各种卷积变种、最新注意力机制、特征融合模块、上下采样模块，
-适用于人工智能(AI)、深度学习、计算机视觉(CV)领域，适用于图像分类、目标检测、实例分割、语义分割、
-单目标跟踪(SOT)、多目标跟踪(MOT)、红外与可见光图像融合跟踪(RGBT)、图像去噪、去雨、去雾、去模糊、超分等任务，
-模块库持续更新中......
-https://github.com/AIFengheshu/Plug-play-modules
-"""
-class GroupBatchnorm2d(nn.Module):
-    def __init__(self, c_num: int,
-                 group_num: int = 16,
-                 eps: float = 1e-10
-                 ):
-        super(GroupBatchnorm2d, self).__init__()
-        assert c_num >= group_num
-        self.group_num = group_num
-        self.weight = nn.Parameter(torch.randn(c_num, 1, 1))
-        self.bias = nn.Parameter(torch.zeros(c_num, 1, 1))
-        self.eps = eps
 
-    def forward(self, x):
-        N, C, H, W = x.size()
-        x = x.view(N, self.group_num, -1)
-        mean = x.mean(dim=2, keepdim=True)
-        std = x.std(dim=2, keepdim=True)
-        x = (x - mean) / (std + self.eps)
-        x = x.view(N, C, H, W)
-        return x * self.weight + self.bias
-
+# 论文题目：SCConv: Spatial and Channel Reconstruction Convolution for Feature Redundancy
+# 中文题目:  SCConv: 用于特征冗余的空间和通道重建卷积
+# 论文链接：https://arxiv.org/pdf/2012.11879https://openaccess.thecvf.com/content/CVPR2023/papers/Li_SCConv_Spatial_and_Channel_Reconstruction_Convolution_for_Feature_Redundancy_CVPR_2023_paper.pdf
+# 官方github：无
+# 所属机构：浙江大学计算机学院，浙江大学上海高等研究院
+# 关键词：卷积神经网络，特征冗余，空间重建单元，通道重建单元，模型压缩
 
 class SRU(nn.Module):
-    def __init__(self,
-                 oup_channels: int,
-                 group_num: int = 16,
-                 gate_treshold: float = 0.5,
-                 torch_gn: bool = False
-                 ):
-        super().__init__()
+    """
+    空间重建单元（Spatial Reconstruction Unit）
 
-        self.gn = nn.GroupNorm(num_channels=oup_channels, num_groups=group_num) if torch_gn else GroupBatchnorm2d(
-            c_num=oup_channels, group_num=group_num)
-        self.gate_treshold = gate_treshold
-        self.sigomid = nn.Sigmoid()
+    减少空间维度中的冗余
 
-    def forward(self, x):
+    主要部分：
+    1. 分离（Separate）
+        - 从空间内容中分离出有信息的特征图和信息较少的特征图，
+        这样我们可以重建低冗余的特征。
+
+    2. 重建（Reconstruction）
+        - 在不同通道之间（有信息的通道和信息较少的通道）进行交互，
+        加强这些通道之间的信息流动，因此可能提高准确度，
+        减少冗余特征并增强CNN的特征表示能力。
+    """
+
+    def __init__(
+            self,
+            channels: int,
+            group_num: int = 4,
+            gate_threshold: float = 0.5,
+    ):
+        super(SRU, self).__init__()
+        self.gn = nn.GroupNorm(group_num, channels)
+        self.gate_threshold = gate_threshold
+        self.sigmoid = nn.Sigmoid()
+
+    def forward(self, x: torch.Tensor):
+        # 从空间内容中分离出有信息的特征图和信息较少的特征图
         gn_x = self.gn(x)
-        w_gamma = self.gn.weight / torch.sum(self.gn.weight)
-        w_gamma = w_gamma.view(1, -1, 1, 1)
-        reweigts = self.sigomid(gn_x * w_gamma)
-        # Gate
-        info_mask = reweigts >= self.gate_treshold
-        noninfo_mask = reweigts < self.gate_treshold
-        x_1 = info_mask * gn_x
-        x_2 = noninfo_mask * gn_x
-        x = self.reconstruct(x_1, x_2)
-        return x
+        # 使用 gn.weight 测量每个批次和通道的空间像素方差
+        w = (self.gn.weight / torch.sum(self.gn.weight)).view(1, -1, 1, 1)
+        w = self.sigmoid(w * gn_x)
+        infor_mask = w >= self.gate_threshold
+        less_infor_maks = w < self.gate_threshold
+        x1 = infor_mask * gn_x
+        x2 = less_infor_maks * gn_x
 
-    def reconstruct(self, x_1, x_2):
-        x_11, x_12 = torch.split(x_1, x_1.size(1) // 2, dim=1)
-        x_21, x_22 = torch.split(x_2, x_2.size(1) // 2, dim=1)
-        return torch.cat([x_11 + x_22, x_12 + x_21], dim=1)
+        # 使用有信息的特征和信息较少的特征重建特征
+        x11, x12 = torch.split(x1, x1.size(1) // 2, dim=1)
+        x21, x22 = torch.split(x2, x2.size(1) // 2, dim=1)
+        out = torch.cat([x11 + x22, x12 + x21], dim=1)
+        return out
 
 
 class CRU(nn.Module):
-    '''
-    alpha: 0<alpha<1
-    '''
+    """
+    空间重建单元（Spatial Reconstruction Unit）
 
-    def __init__(self,
-                 op_channel: int,
-                 alpha: float = 1 / 2,
-                 squeeze_radio: int = 2,
-                 group_size: int = 2,
-                 group_kernel_size: int = 3,
-                 ):
-        super().__init__()
-        self.up_channel = up_channel = int(alpha * op_channel)
-        self.low_channel = low_channel = op_channel - up_channel
-        self.squeeze1 = nn.Conv2d(up_channel, up_channel // squeeze_radio, kernel_size=1, bias=False)
-        self.squeeze2 = nn.Conv2d(low_channel, low_channel // squeeze_radio, kernel_size=1, bias=False)
-        # up
-        self.GWC = nn.Conv2d(up_channel // squeeze_radio, op_channel, kernel_size=group_kernel_size, stride=1,
-                             padding=group_kernel_size // 2, groups=group_size)
-        self.PWC1 = nn.Conv2d(up_channel // squeeze_radio, op_channel, kernel_size=1, bias=False)
-        # low
-        self.PWC2 = nn.Conv2d(low_channel // squeeze_radio, op_channel - low_channel // squeeze_radio, kernel_size=1,
-                              bias=False)
-        self.advavg = nn.AdaptiveAvgPool2d(1)
+    CRU 通过轻量级卷积操作提取丰富的代表性特征，
+    同时通过廉价操作和特征重用方案处理冗余特征。
 
-    def forward(self, x):
-        # Split
-        up, low = torch.split(x, [self.up_channel, self.low_channel], dim=1)
-        up, low = self.squeeze1(up), self.squeeze2(low)
-        # Transform
-        Y1 = self.GWC(up) + self.PWC1(up)
-        Y2 = torch.cat([self.PWC2(low), low], dim=1)
-        # Fuse
-        out = torch.cat([Y1, Y2], dim=1)
-        out = F.softmax(self.advavg(out), dim=1) * out
+    主要部分：
+    1. 分割（Split）
+        - 分割和压缩，将空间特征划分为 Xup（上层转换阶段）
+          和 Xlow（下层转换阶段）
+        Xup 用作 '丰富特征提取器'。
+        Xlow 用作 '细节信息补充'
+
+        Xup 使用 GWC（组卷积）和 PWC（点卷积）替代昂贵的标准 k x k
+        卷积来提取高级代表性信息并减少计算成本。
+
+        GWC 可以减少参数和计算量，但会切断通道组之间的信息流动，
+        因此另一条路径使用 PWC 来帮助信息流跨通道流动，然后将 GWC 和 PWC 的输出相加
+        形成 Y2，用于提取丰富的代表性信息。
+
+        Xlow 重用前馈特征图并利用 1x1 的 PWC 作为对丰富特征提取器的补充，
+        然后将它们连接起来形成 Y2。
+
+    2. 融合（Fuse）
+        - 类似 SKNet，使用 GAP（全局平均池化）和通道维度上的 Soft-Attention 来重构
+        新的特征。
+    """
+
+    def __init__(
+            self,
+            channels: int,
+            alpha: float = 0.5,
+            squeeze_ratio: int = 2,
+            groups: int = 2,
+            stride: int = 1,
+    ):
+        super(CRU, self).__init__()
+        self.upper_channel = int(channels * alpha)
+        self.low_channel = channels - self.upper_channel
+        s_up_c, s_low_c = self.upper_channel // squeeze_ratio, self.low_channel // squeeze_ratio
+        self.squeeze_up = nn.Conv2d(self.upper_channel, s_up_c, 1, stride=stride, bias=False)
+        self.squeeze_low = nn.Conv2d(self.low_channel, s_low_c, 1, stride=stride, bias=False)
+
+        # 上层 -> GWC + PWC
+        self.gwc = nn.Conv2d(s_up_c, channels, 3, stride=1, padding=1, groups=groups)
+        self.pwc1 = nn.Conv2d(s_up_c, channels, 1, bias=False)
+
+        # 下层 -> 连接（前馈特征，PWC）
+        self.pwc2 = nn.Conv2d(s_low_c, channels - s_low_c, 1, bias=False)
+        self.gap = nn.AdaptiveAvgPool2d((1, 1))
+
+        self.softmax = nn.Softmax(dim=1)
+
+    def forward(self, x: torch.Tensor):
+        up, low = torch.split(x, [self.upper_channel, self.low_channel], dim=1)
+        up, low = self.squeeze_up(up), self.squeeze_low(low)
+
+        # 上层 -> GWC + PWC
+        y1 = self.gwc(up) + self.pwc1(up)
+        # 下层 -> 连接（前馈特征，PWC）
+        y2 = torch.cat((low, self.pwc2(low)), dim=1)
+
+        out = torch.cat((y1, y2), dim=1)
+        # 增强包含大量信息的特征图
+        out_s = self.softmax(self.gap(out))
+        out = out * out_s
         out1, out2 = torch.split(out, out.size(1) // 2, dim=1)
+        # 减少冗余信息
         return out1 + out2
 
+class SC(nn.Module):
+    def __init__(
+            self,
+            channels: int,
+            group_num: int = 4,
+            gate_threshold: int = 0.5,
+            alpha: float = 0.5,
+            squeeze_ratio: int = 2,
+            groups: int = 2,
+            stride: int = 1,
+    ):
+        super(SC, self).__init__()
+        self.sru = SRU(channels, group_num, gate_threshold)
+        self.cru = CRU(channels, alpha, squeeze_ratio, groups, stride)
 
-class ScConv(nn.Module):
-    def __init__(self,
-                 op_channel: int,
-                 group_num: int = 4,
-                 gate_treshold: float = 0.5,
-                 alpha: float = 1 / 2,
-                 squeeze_radio: int = 2,
-                 group_size: int = 2,
-                 group_kernel_size: int = 3,
-                 ):
-        super().__init__()
-        self.SRU = SRU(op_channel,
-                       group_num=group_num,
-                       gate_treshold=gate_treshold)
-        self.CRU = CRU(op_channel,
-                       alpha=alpha,
-                       squeeze_radio=squeeze_radio,
-                       group_size=group_size,
-                       group_kernel_size=group_kernel_size)
-
-    def forward(self, x):
-        x = self.SRU(x)
-        x = self.CRU(x)
+    def forward(self, x: torch.Tensor):
+        x = self.sru(x)
+        x = self.cru(x)
         return x
 
-
-
 if __name__ == '__main__':
-    x = torch.randn(3, 32, 64, 64) # 输入 B C H W
-    model = ScConv(32)
+    x       = torch.randn(1,32,16,16)
+    model   = SC(32)
     print(model(x).shape)
