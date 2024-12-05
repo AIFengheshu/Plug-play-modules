@@ -1,19 +1,14 @@
-import numpy as np
 import torch
 from torch import nn
-from torch.nn import init
 from collections import OrderedDict
 
-# 论文地址：https://arxiv.org/pdf/1903.06586
-# 论文：Selective Kernel Networks
+# 论文题目：Selective Kernel Networks
+# 中文题目: 选择性核网络
+# 论文链接：https://arxiv.org/pdf/1903.06586
+# 官方github：https://github.com/implus/SKNet
+# 所属机构：南京理工大学PCALab、Momenta、清华大学
+# 关键词：选择性核网络、卷积神经网络、感受野、自适应选择、深度学习
 # 微信公众号：AI缝合术
-"""
-2024年全网最全即插即用模块,全部免费!包含各种卷积变种、最新注意力机制、特征融合模块、上下采样模块，
-适用于人工智能(AI)、深度学习、计算机视觉(CV)领域，适用于图像分类、目标检测、实例分割、语义分割、
-单目标跟踪(SOT)、多目标跟踪(MOT)、红外与可见光图像融合跟踪(RGBT)、图像去噪、去雨、去雾、去模糊、超分等任务，
-模块库持续更新中......
-https://github.com/AIFengheshu/Plug-play-modules
-"""
 
 class SKAttention(nn.Module):
 
@@ -34,8 +29,6 @@ class SKAttention(nn.Module):
         for i in range(len(kernels)):
             self.fcs.append(nn.Linear(self.d,channel))
         self.softmax=nn.Softmax(dim=0)
-
-
 
     def forward(self, x):
         bs, c, _, _ = x.size()
@@ -64,15 +57,9 @@ class SKAttention(nn.Module):
         V=(attention_weughts*feats).sum(0)
         return V
 
-        
-
-
-
-
 if __name__ == '__main__':
-    input=torch.randn(50,512,7,7)
-    se = SKAttention(channel=512,reduction=8)
-    output=se(input)
+    input=torch.randn(1,256,128,128)
+    print(input.shape)
+    sk = SKAttention(channel=256,reduction=8)
+    output=sk(input)
     print(output.shape)
-
-    
