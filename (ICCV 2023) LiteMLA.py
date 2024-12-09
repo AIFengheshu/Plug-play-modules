@@ -1,120 +1,67 @@
-# --------------------------------------------------------
-# 论文：EfficientViT: Multi-Scale Linear Attention for High-Resolution Dense Prediction  (ICCV2023)
-# GitHub地址:https://github.com/mit-han-lab/efficientvit
-# 微信公众号：AI缝合术
-"""
-2024年全网最全即插即用模块,全部免费!包含各种卷积变种、最新注意力机制、特征融合模块、上下采样模块，
-适用于人工智能(AI)、深度学习、计算机视觉(CV)领域，适用于图像分类、目标检测、实例分割、语义分割、
-单目标跟踪(SOT)、多目标跟踪(MOT)、红外与可见光图像融合跟踪(RGBT)、图像去噪、去雨、去雾、去模糊、超分等任务，
-模块库持续更新中......
-https://github.com/AIFengheshu/Plug-play-modules
-"""
-# --------------------------------------------------------
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.cuda.amp import autocast
-from inspect import signature
-from functools import partial
-from typing import Dict, Tuple
+from typing import Any, Union, Optional, Tuple, List
 
+# 论文来源：ICCV 2023
+# 论文题目：EfficientViT: Multi-Scale Linear Attention for High-Resolution Dense Prediction
+# 中文题目: EfficientViT: 用于高分辨率密集预测的多尺度线性注意力
+# 论文链接：https://arxiv.org/pdf/2205.14756
+# 官方github：https://github.com/mit-han-lab/efficientvit
+# 所属机构：麻省理工，浙江大学，清华大学，麻省理工- ibm沃森人工智能实验室
+# 关键词：EfficientViT, 多尺度线性关注，高分辨率密集预测，视觉转换，语义分割，超分辨率，分割一切
+# 微信公众号：AI缝合术
 
-def get_same_padding(kernel_size: int or Tuple[int, ...]) -> int or Tuple[int, ...]:
+def val2tuple(x: Union[List, Tuple, Any], min_len: int = 1, idx_repeat: int = -1) -> Tuple:
+    x = val2list(x)
+    # repeat elements if necessary
+    if len(x) > 0:
+        x[idx_repeat:idx_repeat] = [x[idx_repeat] for _ in range(min_len - len(x))]
+    return tuple(x)
+
+def val2list(x: Union[List, Tuple, Any], repeat_time=1) -> List:
+    if isinstance(x, (list, tuple)):
+        return list(x)
+    return [x for _ in range(repeat_time)]
+
+def get_same_padding(kernel_size: Union[int, Tuple[int, ...]]) -> Union[int, Tuple[int, ...]]:
     if isinstance(kernel_size, tuple):
         return tuple([get_same_padding(ks) for ks in kernel_size])
     else:
         assert kernel_size % 2 > 0, "kernel size should be odd number"
         return kernel_size // 2
 
-
-def val2list(x: list or tuple or any, repeat_time=1) -> list:
-    if isinstance(x, (list, tuple)):
-        return list(x)
-    return [x for _ in range(repeat_time)]
-
-
-def val2tuple(x: list or tuple or any, min_len: int = 1, idx_repeat: int = -1) -> tuple:
-    x = val2list(x)
-
-    # repeat elements if necessary
-    if len(x) > 0:
-        x[idx_repeat:idx_repeat] = [x[idx_repeat] for _ in range(min_len - len(x))]
-
-    return tuple(x)
-
-
-def build_kwargs_from_config(config: dict, target_func: callable) -> Dict[str, any]:
-    valid_keys = list(signature(target_func).parameters)
-    kwargs = {}
-    for key in config:
-        if key in valid_keys:
-            kwargs[key] = config[key]
-    return kwargs
-
-
-# register activation function here
-REGISTERED_ACT_DICT: Dict[str, type] = {
-    "relu": nn.ReLU,
-    "relu6": nn.ReLU6,
-    "hswish": nn.Hardswish,
-    "silu": nn.SiLU,
-    "gelu": partial(nn.GELU, approximate="tanh"),
-}
-
-
-def build_act(name: str, **kwargs) -> nn.Module or None:
-    if name in REGISTERED_ACT_DICT:
-        act_cls = REGISTERED_ACT_DICT[name]
-        args = build_kwargs_from_config(kwargs, act_cls)
-        return act_cls(**args)
-    else:
-        return None
-
-
-class LayerNorm2d(nn.LayerNorm):
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        out = x - torch.mean(x, dim=1, keepdim=True)
-        out = out / torch.sqrt(torch.square(out).mean(dim=1, keepdim=True) + self.eps)
-        if self.elementwise_affine:
-            out = out * self.weight.view(1, -1, 1, 1) + self.bias.view(1, -1, 1, 1)
-        return out
-
-
-# register normalization function here
-REGISTERED_NORM_DICT: Dict[str, type] = {
-    "bn2d": nn.BatchNorm2d,
-    "ln": nn.LayerNorm,
-    "ln2d": LayerNorm2d,
-}
-
-
-def build_norm(name="bn2d", num_features=None, **kwargs) -> nn.Module or None:
-    if name in ["ln", "ln2d"]:
-        kwargs["normalized_shape"] = num_features
-    else:
-        kwargs["num_features"] = num_features
-    if name in REGISTERED_NORM_DICT:
-        norm_cls = REGISTERED_NORM_DICT[name]
-        args = build_kwargs_from_config(kwargs, norm_cls)
-        return norm_cls(**args)
-    else:
-        return None
-
-
+    
 class ConvLayer(nn.Module):
-    def __init__(self, in_channels: int, out_channels: int, kernel_size=3, stride=1, dilation=1, groups=1,
-                 use_bias=False, dropout=0, norm="bn2d", act_func="relu", ):
+    def __init__(
+        self,
+        in_channels: int,
+        out_channels: int,
+        kernel_size=3,
+        stride=1,
+        dilation=1,
+        groups=1,
+        use_bias=False,
+        dropout=0,
+        norm="bn2d",
+        act_func="relu",
+    ):
         super(ConvLayer, self).__init__()
         padding = get_same_padding(kernel_size)
         padding *= dilation
-
         self.dropout = nn.Dropout2d(dropout, inplace=False) if dropout > 0 else None
-        self.conv = nn.Conv2d(in_channels, out_channels, kernel_size=(kernel_size, kernel_size),
-                              stride=(stride, stride), padding=padding,
-                              dilation=(dilation, dilation), groups=groups, bias=use_bias, )
-        self.norm = build_norm(norm, num_features=out_channels)
-        self.act = build_act(act_func)
+        self.conv = nn.Conv2d(
+            in_channels,
+            out_channels,
+            kernel_size=(kernel_size, kernel_size),
+            stride=(stride, stride),
+            padding=padding,
+            dilation=(dilation, dilation),
+            groups=groups,
+            bias=use_bias,
+        )
+        self.norm = nn.BatchNorm2d(out_channels)
+        self.act = nn.ReLU(act_func)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         if self.dropout is not None:
@@ -126,49 +73,90 @@ class ConvLayer(nn.Module):
             x = self.act(x)
         return x
 
-
 class LiteMLA(nn.Module):
-    r"""Lightweight multi-scale linear attention"""
+    """Lightweight multi-scale linear attention"""
 
     def __init__(
-            self,
-            in_channels: int, out_channels: int, heads: int or None = None, heads_ratio: float = 1.0, dim=8,
-            use_bias=False,
-            norm=(None, "bn2d"), act_func=(None, None), kernel_func="relu", scales: Tuple[int, ...] = (5,),
-            eps=1.0e-15, ):
+        self,
+        in_channels: int,
+        out_channels: int,
+        heads: Optional[int] = None,
+        heads_ratio: float = 1.0,
+        dim=8,
+        use_bias=False,
+        norm=(None, "bn2d"),
+        act_func=(None, None),
+        kernel_func="relu",
+        scales: tuple[int, ...] = (5,),
+        eps=1.0e-15,
+    ):
         super(LiteMLA, self).__init__()
         self.eps = eps
-        heads = heads or int(in_channels // dim * heads_ratio)
+        heads = int(in_channels // dim * heads_ratio) if heads is None else heads
+
         total_dim = heads * dim
+
         use_bias = val2tuple(use_bias, 2)
         norm = val2tuple(norm, 2)
         act_func = val2tuple(act_func, 2)
 
         self.dim = dim
-        self.qkv = ConvLayer(in_channels, 3 * total_dim, 1, use_bias=use_bias[0], norm=norm[0], act_func=act_func[0], )
+        self.qkv = ConvLayer(
+            in_channels,
+            3 * total_dim,
+            1,
+            use_bias=use_bias[0],
+            norm=norm[0],
+            act_func=act_func[0],
+        )
         self.aggreg = nn.ModuleList(
-            [nn.Sequential(
-                nn.Conv2d(3 * total_dim, 3 * total_dim, scale, padding=get_same_padding(scale), groups=3 * total_dim,
-                          bias=use_bias[0], ),
-                nn.Conv2d(3 * total_dim, 3 * total_dim, 1, groups=3 * heads, bias=use_bias[0]),
-            )
+            [
+                nn.Sequential(
+                    nn.Conv2d(
+                        3 * total_dim,
+                        3 * total_dim,
+                        scale,
+                        padding=get_same_padding(scale),
+                        groups=3 * total_dim,
+                        bias=use_bias[0],
+                    ),
+                    nn.Conv2d(3 * total_dim, 3 * total_dim, 1, groups=3 * heads, bias=use_bias[0]),
+                )
                 for scale in scales
             ]
         )
-        self.kernel_func = build_act(kernel_func, inplace=False)
-        self.proj = ConvLayer(total_dim * (1 + len(scales)), out_channels, 1, use_bias=use_bias[1], norm=norm[1],
-                              act_func=act_func[1], )
+        self.kernel_func = nn.ReLU(kernel_func)
 
-    @autocast(enabled=False)
+        self.proj = ConvLayer(
+            total_dim * (1 + len(scales)),
+            out_channels,
+            1,
+            use_bias=use_bias[1],
+            norm=norm[1],
+            act_func=act_func[1],
+        )
+
+    @torch.autocast(device_type="cuda", enabled=False)
     def relu_linear_att(self, qkv: torch.Tensor) -> torch.Tensor:
         B, _, H, W = list(qkv.size())
 
         if qkv.dtype == torch.float16:
             qkv = qkv.float()
 
-        qkv = torch.reshape(qkv, (B, -1, 3 * self.dim, H * W,), )
-        qkv = torch.transpose(qkv, -1, -2)
-        q, k, v = (qkv[..., 0: self.dim], qkv[..., self.dim: 2 * self.dim], qkv[..., 2 * self.dim:],)
+        qkv = torch.reshape(
+            qkv,
+            (
+                B,
+                -1,
+                3 * self.dim,
+                H * W,
+            ),
+        )
+        q, k, v = (
+            qkv[:, :, 0 : self.dim],
+            qkv[:, :, self.dim : 2 * self.dim],
+            qkv[:, :, 2 * self.dim :],
+        )
 
         # lightweight linear attention
         q = self.kernel_func(q)
@@ -176,13 +164,42 @@ class LiteMLA(nn.Module):
 
         # linear matmul
         trans_k = k.transpose(-1, -2)
+        v = F.pad(v, (0, 0, 0, 1), mode="constant", value=1)
+        vk = torch.matmul(v, trans_k)
+        out = torch.matmul(vk, q)
+        if out.dtype == torch.bfloat16:
+            out = out.float()
+        out = out[:, :, :-1] / (out[:, :, -1:] + self.eps)
+        out = torch.reshape(out, (B, -1, H, W))
+        return out
 
-        v = F.pad(v, (0, 1), mode="constant", value=1)
-        kv = torch.matmul(trans_k, v)
-        out = torch.matmul(q, kv)
-        out = out[..., :-1] / (out[..., -1:] + self.eps)
+    @torch.autocast(device_type="cuda", enabled=False)
+    def relu_quadratic_att(self, qkv: torch.Tensor) -> torch.Tensor:
+        B, _, H, W = list(qkv.size())
 
-        out = torch.transpose(out, -1, -2)
+        qkv = torch.reshape(
+            qkv,
+            (
+                B,
+                -1,
+                3 * self.dim,
+                H * W,
+            ),
+        )
+        q, k, v = (
+            qkv[:, :, 0 : self.dim],
+            qkv[:, :, self.dim : 2 * self.dim],
+            qkv[:, :, 2 * self.dim :],
+        )
+        q = self.kernel_func(q)
+        k = self.kernel_func(k)
+        att_map = torch.matmul(k.transpose(-1, -2), q)  # b h n n
+        original_dtype = att_map.dtype
+        if original_dtype in [torch.float16, torch.bfloat16]:
+            att_map = att_map.float()
+        att_map = att_map / (torch.sum(att_map, dim=2, keepdim=True) + self.eps)  # b h n n
+        att_map = att_map.to(original_dtype)
+        out = torch.matmul(v, att_map)  # b h d n
         out = torch.reshape(out, (B, -1, H, W))
         return out
 
@@ -192,16 +209,52 @@ class LiteMLA(nn.Module):
         multi_scale_qkv = [qkv]
         for op in self.aggreg:
             multi_scale_qkv.append(op(qkv))
-        multi_scale_qkv = torch.cat(multi_scale_qkv, dim=1)
-
-        out = self.relu_linear_att(multi_scale_qkv)
+        qkv = torch.cat(multi_scale_qkv, dim=1)
+        H, W = list(qkv.size())[-2:]
+        if H * W > self.dim:
+            out = self.relu_linear_att(qkv).to(qkv.dtype)
+        else:
+            out = self.relu_quadratic_att(qkv)
         out = self.proj(out)
-
         return out
+    
+if __name__ == "__main__":
+    # 测试输入张量
+    input_tensor = torch.randn(1, 32, 256, 256)
 
+    # LiteMLA 参数
+    out_channels = 64  # 输出通道数
+    heads = None  # 默认根据 heads_ratio 自动计算
+    heads_ratio = 1.0
+    dim = 8  # 单个头的维度
+    use_bias = False
+    norm = (None, "bn2d")
+    act_func = (None, None)
+    kernel_func = "relu"
+    scales = (5, 3)  # 多尺度卷积核大小
+    eps = 1.0e-15
 
-if __name__ == '__main__':
-    block = LiteMLA(in_channels=64, out_channels=64, scales=(5,))  # scales: 单尺度:(5,); 多尺度:(3,5)
-    input1 = torch.rand(3, 64, 32, 32) # 输入 B C H W
-    output = block(input1)
-    print(output.size())
+    # 初始化 LiteMLA 模块
+    mla_module = LiteMLA(
+        in_channels=32,
+        out_channels=out_channels,
+        heads=heads,
+        heads_ratio=heads_ratio,
+        dim=dim,
+        use_bias=use_bias,
+        norm=norm,
+        act_func=act_func,
+        kernel_func=kernel_func,
+        scales=scales,
+        eps=eps,
+    )
+    
+    # 将模型和张量移动到 GPU（如果可用）
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    mla_module.to(device)
+    input_tensor = input_tensor.to(device)
+    # 前向传播
+    output = mla_module(input_tensor)
+    # 输出结果
+    print(f"输入张量形状: {input_tensor.shape}")
+    print(f"输出张量形状: {output.shape}")
