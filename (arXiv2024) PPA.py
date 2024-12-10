@@ -1,20 +1,13 @@
-# --------------------------------------------------------
-# 论文:HCF-Net: Hierarchical Context Fusion Network for Infrared Small Object Detection (arxiv 2024)
-# github地址:https://github.com/zhengshuchen/HCFNet
-# 微信公众号：AI缝合术
-"""
-2024年全网最全即插即用模块,全部免费!包含各种卷积变种、最新注意力机制、特征融合模块、上下采样模块，
-适用于人工智能(AI)、深度学习、计算机视觉(CV)领域，适用于图像分类、目标检测、实例分割、语义分割、
-单目标跟踪(SOT)、多目标跟踪(MOT)、红外与可见光图像融合跟踪(RGBT)、图像去噪、去雨、去雾、去模糊、超分等任务，
-模块库持续更新中......
-https://github.com/AIFengheshu/Plug-play-modules
-"""
-# ------
 import math
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+# 论文题目：HCF-Net: Hierarchical Context Fusion Network for Infrared Small Object Detection
+# 中文题目: HCF-Net:用于红外小目标检测的层次化上下文融合网络
+# 论文链接：https://arxiv.org/pdf/2403.10778
+# 官方github：https://github.com/zhengshuchen/HCFNet
+# 微信公众号：AI缝合术
 
 class SpatialAttentionModule(nn.Module):
     def __init__(self):
@@ -127,7 +120,6 @@ class LocalGlobalAttention(nn.Module):
 
         return output
 
-
 class ECA(nn.Module):
     def __init__(self, in_channel, gamma=2, b=1):
         super(ECA, self).__init__()
@@ -146,7 +138,6 @@ class ECA(nn.Module):
         out = self.conv(out)
         out = out.view(x.size(0), x.size(1), 1, 1)
         return out * x
-
 
 class conv_block(nn.Module):
     def __init__(self,
@@ -190,10 +181,11 @@ class conv_block(nn.Module):
             x = self.relu(x)
         return x
 
-
 if __name__ == '__main__':
-    block = PPA(in_features=64, filters=64)  # 输入通道数，输出通道数
-    input = torch.rand(3, 64, 128, 128)  # 输入 B C H W
-    output = block(input)
-    print(input.size())
-    print(output.size())
+
+    # 输入通道数，输出通道数
+    ppa = PPA(in_features=64, filters=64) 
+    input = torch.rand(1, 64, 128, 128)  # 输入 B C H W
+    output = ppa(input)
+    print(f"Input shape: {input.shape}")
+    print(f"Output shape: {output.shape}")
