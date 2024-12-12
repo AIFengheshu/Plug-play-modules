@@ -2,13 +2,13 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-# ÂÛÎÄÌâÄ¿£ºPlainUSR: Chasing Faster ConvNet for Efficient Super-Resolution
-# ÖĞÎÄÌâÄ¿:  PlainUSR: ×·Çó¸ü¿ìµÄ¾í»ıÉñ¾­ÍøÂçÒÔÊµÏÖ¸ßĞ§µÄ³¬·Ö±æÂÊ
-# ÂÛÎÄÁ´½Ó£ºhttps://openaccess.thecvf.com/content/ACCV2024/papers/Wang_PlainUSR_Chasing_Faster_ConvNet_for_Efficient_Super-Resolution_ACCV_2024_paper.pdf
-# ¹Ù·½github£ºhttps://github.com/icandle/PlainUSR
-# ËùÊô»ú¹¹£ºÄÏ¿ª´óÑ§¼ÆËã»ú¿ÆÑ§Ñ§Ôº
-# ¹Ø¼ü´Ê£º³¬·Ö±æÂÊ£¬ÖØ²ÎÊı»¯£¬×¢ÒâÁ¦
-# ´úÂëÕûÀí£ºÎ¢ĞÅ¹«ÖÚºÅ¡¶AI·ìºÏÊõ¡·
+# è®ºæ–‡é¢˜ç›®ï¼šPlainUSR: Chasing Faster ConvNet for Efficient Super-Resolution
+# ä¸­æ–‡é¢˜ç›®:  PlainUSR: è¿½æ±‚æ›´å¿«çš„å·ç§¯ç¥ç»ç½‘ç»œä»¥å®ç°é«˜æ•ˆçš„è¶…åˆ†è¾¨ç‡
+# è®ºæ–‡é“¾æ¥ï¼šhttps://openaccess.thecvf.com/content/ACCV2024/papers/Wang_PlainUSR_Chasing_Faster_ConvNet_for_Efficient_Super-Resolution_ACCV_2024_paper.pdf
+# å®˜æ–¹githubï¼šhttps://github.com/icandle/PlainUSR
+# æ‰€å±æœºæ„ï¼šå—å¼€å¤§å­¦è®¡ç®—æœºç§‘å­¦å­¦é™¢
+# å…³é”®è¯ï¼šè¶…åˆ†è¾¨ç‡ï¼Œé‡å‚æ•°åŒ–ï¼Œæ³¨æ„åŠ›
+# ä»£ç æ•´ç†ï¼šå¾®ä¿¡å…¬ä¼—å·ã€ŠAIç¼åˆæœ¯ã€‹
 
 class SoftPooling2D(torch.nn.Module):
     def __init__(self,kernel_size,stride=None,padding=0):
@@ -48,8 +48,8 @@ if __name__ == '__main__':
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
 
-    la = LocalAttention(channels=32).to(device)  # ½«Ä£ĞÍÒÆ¶¯µ½Éè±¸
-    input = torch.rand(1, 32, 256, 256).to(device)  # ½«ÊäÈëÊı¾İÒÆ¶¯µ½Éè±¸
+    la = LocalAttention(channels=32).to(device)  # å°†æ¨¡å‹ç§»åŠ¨åˆ°è®¾å¤‡
+    input = torch.rand(1, 32, 256, 256).to(device)  # å°†è¾“å…¥æ•°æ®ç§»åŠ¨åˆ°è®¾å¤‡
 
     output = la(input)
     print(f"\nInput shape: {input.shape}")
