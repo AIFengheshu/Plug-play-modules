@@ -3,18 +3,18 @@ import torch.nn as nn
 import math
 import torch.nn.functional as F
 
-# ÂÛÎÄÌâÄ¿£ºMixed local channel attention for object detection
-# ÖĞÎÄÌâÄ¿£º»ìºÏ¾Ö²¿Í¨µÀ×¢ÒâÁ¦ÓÃÓÚÄ¿±ê¼ì²â
-# ÂÛÎÄÁ´½Ó£ºhttps://doi.org/10.1016/j.engappai.2023.106442
-# ¹Ù·½github£ºhttps://github.com/wandahangFY/MLCA
-# ËùÊô»ú¹¹£ººÏ·Ê¹¤Òµ´óÑ§ÒÇÆ÷¿ÆÑ§Óë¹âµç¹¤³ÌÑ§Ôº£¬ºÏ·Ê¹¤Òµ´óÑ§°²»ÕÊ¡²âÁ¿ÀíÂÛÓë¾«ÃÜÒÇÆ÷ÖØµãÊµÑéÊÒ
-# ´úÂëÕûÀí£ºÎ¢ĞÅ¹«ÖÚºÅ¡¶AI·ìºÏÊõ¡·
+# è®ºæ–‡é¢˜ç›®ï¼šMixed local channel attention for object detection
+# ä¸­æ–‡é¢˜ç›®ï¼šæ··åˆå±€éƒ¨é€šé“æ³¨æ„åŠ›ç”¨äºç›®æ ‡æ£€æµ‹
+# è®ºæ–‡é“¾æ¥ï¼šhttps://doi.org/10.1016/j.engappai.2023.106442
+# å®˜æ–¹githubï¼šhttps://github.com/wandahangFY/MLCA
+# æ‰€å±æœºæ„ï¼šåˆè‚¥å·¥ä¸šå¤§å­¦ä»ªå™¨ç§‘å­¦ä¸å…‰ç”µå·¥ç¨‹å­¦é™¢ï¼Œåˆè‚¥å·¥ä¸šå¤§å­¦å®‰å¾½çœæµ‹é‡ç†è®ºä¸ç²¾å¯†ä»ªå™¨é‡ç‚¹å®éªŒå®¤
+# ä»£ç æ•´ç†ï¼šå¾®ä¿¡å…¬ä¼—å·ã€ŠAIç¼åˆæœ¯ã€‹
 
 class MLCA(nn.Module):
     def __init__(self, in_size,local_size=5,gamma = 2, b = 1,local_weight=0.5):
         super(MLCA, self).__init__()
 
-        # ECA ¼ÆËã·½·¨
+        # ECA è®¡ç®—æ–¹æ³•
         self.local_size=local_size
         self.gamma = gamma
         self.b = b
@@ -47,9 +47,9 @@ class MLCA(nn.Module):
         # (b,c,local_size,local_size) <- (b,c,local_size*local_size)<-(b,local_size*local_size,c) <- (b,1,local_size*local_size*c)
         y_local_transpose=y_local.reshape(b, self.local_size * self.local_size,c).transpose(-1,-2).view(b,c, self.local_size , self.local_size)
         # y_global_transpose = y_global.view(b, -1).transpose(-1, -2).unsqueeze(-1)
-        y_global_transpose = y_global.view(b, -1).unsqueeze(-1).unsqueeze(-1)  # ´úÂëĞŞÕı
+        y_global_transpose = y_global.view(b, -1).unsqueeze(-1).unsqueeze(-1)  # ä»£ç ä¿®æ­£
 
-        # ·´³Ø»¯
+        # åæ± åŒ–
         att_local = y_local_transpose.sigmoid()
         att_global = F.adaptive_avg_pool2d(y_global_transpose.sigmoid(),[self.local_size, self.local_size])
         att_all = F.adaptive_avg_pool2d(att_global*(1-self.local_weight)+(att_local*self.local_weight), [m, n])
@@ -62,6 +62,6 @@ if __name__ == '__main__':
     input_tensor = torch.rand(1, 32, 256, 256).to(device)
     attention_module = MLCA(32).to(device)
     output_tensor = attention_module(input_tensor)
-    # ´òÓ¡ÊäÈëºÍÊä³öµÄĞÎ×´
-    print(f"ÊäÈëÕÅÁ¿ĞÎ×´: {input_tensor.shape}")
-    print(f"Êä³öÕÅÁ¿ĞÎ×´: {output_tensor.shape}")
+    # æ‰“å°è¾“å…¥å’Œè¾“å‡ºçš„å½¢çŠ¶
+    print(f"è¾“å…¥å¼ é‡å½¢çŠ¶: {input_tensor.shape}")
+    print(f"è¾“å‡ºå¼ é‡å½¢çŠ¶: {output_tensor.shape}")
