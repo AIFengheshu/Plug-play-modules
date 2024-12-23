@@ -1,18 +1,13 @@
-import numpy as np
 import torch
-from torch import nn
+import torch.nn as nn
 from torch.nn import init
 
-# 论文地址：https://arxiv.org/pdf/2105.14447
-# 论文：EPSANet: An Efficient Pyramid Squeeze Attention Block on Convolutional Neural Network
-# 微信公众号：AI缝合术
-"""
-2024年全网最全即插即用模块,全部免费!包含各种卷积变种、最新注意力机制、特征融合模块、上下采样模块，
-适用于人工智能(AI)、深度学习、计算机视觉(CV)领域，适用于图像分类、目标检测、实例分割、语义分割、
-单目标跟踪(SOT)、多目标跟踪(MOT)、红外与可见光图像融合跟踪(RGBT)、图像去噪、去雨、去雾、去模糊、超分等任务，
-模块库持续更新中......
-https://github.com/AIFengheshu/Plug-play-modules
-"""
+# 论文题目：EPSANet: An Efficient Pyramid Squeeze Attention Block on Convolutional Neural Network
+# 中文题目：EPSANet：一种高效的金字塔挤压注意力块在卷积神经网络上
+# 论文链接：https://arxiv.org/pdf/2105.14447
+# 官方github：https://github.com/murufeng/EPSANet
+# 所属机构：深圳大学，西安交通大学
+# 代码整理：微信公众号《AI缝合术》
 
 class PSA(nn.Module):
 
@@ -75,13 +70,11 @@ class PSA(nn.Module):
 
         return PSA_out
 
-
 if __name__ == '__main__':
-    input=torch.randn(50,512,7,7)
-    psa = PSA(channel=512,reduction=8)
-    output=psa(input)
-    a=output.view(-1).sum()
-    a.backward()
-    print(output.shape)
-
-    
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    input_tensor = torch.rand(1, 32, 256, 256)
+    attention_module = PSA(channel=32,reduction=8)
+    output_tensor = attention_module(input_tensor)
+    # 打印输入和输出的形状
+    print(f"输入张量形状: {input_tensor.shape}")
+    print(f"输出张量形状: {output_tensor.shape}")
