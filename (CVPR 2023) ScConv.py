@@ -5,7 +5,7 @@ import torch.nn as nn
 # 中文题目:  SCConv: 用于特征冗余的空间和通道重建卷积
 # 论文链接：https://arxiv.org/pdf/2012.11879https://openaccess.thecvf.com/content/CVPR2023/papers/Li_SCConv_Spatial_and_Channel_Reconstruction_Convolution_for_Feature_Redundancy_CVPR_2023_paper.pdf
 # 官方github：无
-# 所属机构：浙江大学计算机学院，浙江大学上海高等研究院
+# 所属机构：华东师范大学，同济大学
 # 关键词：卷积神经网络，特征冗余，空间重建单元，通道重建单元，模型压缩
 
 class SRU(nn.Module):
