@@ -3,27 +3,27 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.autograd
 
-# ÂÛÎÄÌâÄ¿£ºOmni-Dimensional Dynamic Convolution
-# ÖĞÎÄÌâÄ¿:  È«Î¬¶È¶¯Ì¬¾í»ı
-# ÂÛÎÄÁ´½Ó£ºhttps://openreview.net/pdf?id=DmpCfq6Mg39
-# ¹Ù·½github£ºhttps://github.com/OSVAI/ODConv
-# ´úÂë½â¶Á£ºÎ¢ĞÅ¹«ÖÚºÅ£ºAI·ìºÏÊõ
-# github£ºhttps://github.com/AIFengheshu/Plug-play-modules
+# è®ºæ–‡é¢˜ç›®ï¼šOmni-Dimensional Dynamic Convolution
+# ä¸­æ–‡é¢˜ç›®:  å…¨ç»´åº¦åŠ¨æ€å·ç§¯
+# è®ºæ–‡é“¾æ¥ï¼šhttps://openreview.net/pdf?id=DmpCfq6Mg39
+# å®˜æ–¹githubï¼šhttps://github.com/OSVAI/ODConv
+# ä»£ç è§£è¯»ï¼šå¾®ä¿¡å…¬ä¼—å·ï¼šAIç¼åˆæœ¯
+# githubï¼šhttps://github.com/AIFengheshu/Plug-play-modules
 
-# ODConvÀà£¬¼Ì³Ğ×Ônn.Sequential
+# ODConvç±»ï¼Œç»§æ‰¿è‡ªnn.Sequential
 class ODConv(nn.Sequential):
     def __init__(self, in_planes, out_planes, kernel_size=3, stride=1, groups=1, norm_layer=nn.BatchNorm2d,
                  reduction=0.0625, kernel_num=1):
-        padding = (kernel_size - 1) // 2  # ¸ù¾İkernel_size¼ÆËãÌî³ä´óĞ¡
+        padding = (kernel_size - 1) // 2  # æ ¹æ®kernel_sizeè®¡ç®—å¡«å……å¤§å°
         super(ODConv, self).__init__(
-            # Ê¹ÓÃ ODConv2d ¾í»ı£¬Ó¦ÓÃÓÚÊäÈëºÍÊä³öÍ¨µÀµÄ±ä»¯
+            # ä½¿ç”¨ ODConv2d å·ç§¯ï¼Œåº”ç”¨äºè¾“å…¥å’Œè¾“å‡ºé€šé“çš„å˜åŒ–
             ODConv2d(in_planes, out_planes, kernel_size, stride, padding, groups=groups,
                      reduction=reduction, kernel_num=kernel_num),
-            norm_layer(out_planes),  # Ìí¼Ó±ê×¼»¯²ã
-            nn.SiLU()  # Ê¹ÓÃSiLU¼¤»îº¯Êı
+            norm_layer(out_planes),  # æ·»åŠ æ ‡å‡†åŒ–å±‚
+            nn.SiLU()  # ä½¿ç”¨SiLUæ¿€æ´»å‡½æ•°
         )
 
-# ×¢ÒâÁ¦»úÖÆÀà£¬¼Ì³Ğ×Ônn.Module
+# æ³¨æ„åŠ›æœºåˆ¶ç±»ï¼Œç»§æ‰¿è‡ªnn.Module
 class Attention(nn.Module):
     def __init__(self, in_planes, out_planes, kernel_size,
                  groups=1,
@@ -31,47 +31,47 @@ class Attention(nn.Module):
                  kernel_num=4,
                  min_channel=16):
         super(Attention, self).__init__()
-        attention_channel = max(int(in_planes * reduction), min_channel)  # È·¶¨×¢ÒâÁ¦Í¨µÀÊı
+        attention_channel = max(int(in_planes * reduction), min_channel)  # ç¡®å®šæ³¨æ„åŠ›é€šé“æ•°
         self.kernel_size = kernel_size
         self.kernel_num = kernel_num
-        self.temperature = 1.0  # ÎÂ¶È²ÎÊı£¬ÓÃÓÚ¿ØÖÆsoftmaxµÄÆ½»¬¶È
+        self.temperature = 1.0  # æ¸©åº¦å‚æ•°ï¼Œç”¨äºæ§åˆ¶softmaxçš„å¹³æ»‘åº¦
 
-        self.avgpool = nn.AdaptiveAvgPool2d(1)  # ×ÔÊÊÓ¦È«¾ÖÆ½¾ù³Ø»¯
-        self.fc = nn.Conv2d(in_planes, attention_channel, 1, bias=False)  # ÏßĞÔ²ã
-        self.bn = nn.BatchNorm2d(attention_channel)  # Åú¹éÒ»»¯
-        self.relu = nn.ReLU(inplace=True)  # ReLU¼¤»îº¯Êı
+        self.avgpool = nn.AdaptiveAvgPool2d(1)  # è‡ªé€‚åº”å…¨å±€å¹³å‡æ± åŒ–
+        self.fc = nn.Conv2d(in_planes, attention_channel, 1, bias=False)  # çº¿æ€§å±‚
+        self.bn = nn.BatchNorm2d(attention_channel)  # æ‰¹å½’ä¸€åŒ–
+        self.relu = nn.ReLU(inplace=True)  # ReLUæ¿€æ´»å‡½æ•°
 
-        # Í¨µÀ×¢ÒâÁ¦·ÖÖ§
+        # é€šé“æ³¨æ„åŠ›åˆ†æ”¯
         self.channel_fc = nn.Conv2d(attention_channel, in_planes, 1, bias=True)
-        self.func_channel = self.get_channel_attention  # »ñÈ¡Í¨µÀ×¢ÒâÁ¦
+        self.func_channel = self.get_channel_attention  # è·å–é€šé“æ³¨æ„åŠ›
 
-        # ÅĞ¶ÏÊÇ·ñÎªÉî¶È¾í»ı
-        if in_planes == groups and in_planes == out_planes:  # Éî¶È¾í»ıµÄÇé¿ö
+        # åˆ¤æ–­æ˜¯å¦ä¸ºæ·±åº¦å·ç§¯
+        if in_planes == groups and in_planes == out_planes:  # æ·±åº¦å·ç§¯çš„æƒ…å†µ
             self.func_filter = self.skip
         else:
-            # ÉèÖÃÂË²¨×¢ÒâÁ¦·ÖÖ§
+            # è®¾ç½®æ»¤æ³¢æ³¨æ„åŠ›åˆ†æ”¯
             self.filter_fc = nn.Conv2d(attention_channel, out_planes, 1, bias=True)
-            self.func_filter = self.get_filter_attention  # »ñÈ¡ÂË²¨×¢ÒâÁ¦
+            self.func_filter = self.get_filter_attention  # è·å–æ»¤æ³¢æ³¨æ„åŠ›
 
-        # ÅĞ¶ÏÊÇ·ñÎªµã¾í»ı
-        if kernel_size == 1:  # µã¾í»ıµÄÇé¿ö
+        # åˆ¤æ–­æ˜¯å¦ä¸ºç‚¹å·ç§¯
+        if kernel_size == 1:  # ç‚¹å·ç§¯çš„æƒ…å†µ
             self.func_spatial = self.skip
         else:
-            # ÉèÖÃ¿Õ¼ä×¢ÒâÁ¦·ÖÖ§
+            # è®¾ç½®ç©ºé—´æ³¨æ„åŠ›åˆ†æ”¯
             self.spatial_fc = nn.Conv2d(attention_channel, kernel_size * kernel_size, 1, bias=True)
-            self.func_spatial = self.get_spatial_attention  # »ñÈ¡¿Õ¼ä×¢ÒâÁ¦
+            self.func_spatial = self.get_spatial_attention  # è·å–ç©ºé—´æ³¨æ„åŠ›
 
-        # ÉèÖÃÄÚºË×¢ÒâÁ¦·ÖÖ§
+        # è®¾ç½®å†…æ ¸æ³¨æ„åŠ›åˆ†æ”¯
         if kernel_num == 1:
             self.func_kernel = self.skip
         else:
             self.kernel_fc = nn.Conv2d(attention_channel, kernel_num, 1, bias=True)
-            self.func_kernel = self.get_kernel_attention  # »ñÈ¡ÄÚºË×¢ÒâÁ¦
+            self.func_kernel = self.get_kernel_attention  # è·å–å†…æ ¸æ³¨æ„åŠ›
 
-        self.bn_1 = nn.LayerNorm([attention_channel, 1, 1])  # ²ã¹éÒ»»¯
-        self._initialize_weights()  # ³õÊ¼»¯È¨ÖØ
+        self.bn_1 = nn.LayerNorm([attention_channel, 1, 1])  # å±‚å½’ä¸€åŒ–
+        self._initialize_weights()  # åˆå§‹åŒ–æƒé‡
 
-    # ³õÊ¼»¯È¨ÖØ
+    # åˆå§‹åŒ–æƒé‡
     def _initialize_weights(self):
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
@@ -82,59 +82,59 @@ class Attention(nn.Module):
                 nn.init.constant_(m.weight, 1)
                 nn.init.constant_(m.bias, 0)
 
-    # ¸üĞÂÎÂ¶È²ÎÊı
+    # æ›´æ–°æ¸©åº¦å‚æ•°
     def update_temperature(self, temperature):
         self.temperature = temperature
 
-    # ¾²Ì¬·½·¨£ºÌø¹ı²Ù×÷£¬·µ»Ø1.0
+    # é™æ€æ–¹æ³•ï¼šè·³è¿‡æ“ä½œï¼Œè¿”å›1.0
     @staticmethod
     def skip(_):
         return 1.0
 
-    # »ñÈ¡Í¨µÀ×¢ÒâÁ¦
+    # è·å–é€šé“æ³¨æ„åŠ›
     def get_channel_attention(self, x):
         channel_attention = torch.sigmoid(self.channel_fc(x).view(x.size(0), -1, 1, 1) / self.temperature)
         return channel_attention
 
-    # »ñÈ¡ÂË²¨×¢ÒâÁ¦
+    # è·å–æ»¤æ³¢æ³¨æ„åŠ›
     def get_filter_attention(self, x):
         filter_attention = torch.sigmoid(self.filter_fc(x).view(x.size(0), -1, 1, 1) / self.temperature)
         return filter_attention
 
-    # »ñÈ¡¿Õ¼ä×¢ÒâÁ¦
+    # è·å–ç©ºé—´æ³¨æ„åŠ›
     def get_spatial_attention(self, x):
         spatial_attention = self.spatial_fc(x).view(x.size(0), 1, 1, 1, self.kernel_size, self.kernel_size)
         spatial_attention = torch.sigmoid(spatial_attention / self.temperature)
         return spatial_attention
 
-    # »ñÈ¡ÄÚºË×¢ÒâÁ¦
+    # è·å–å†…æ ¸æ³¨æ„åŠ›
     def get_kernel_attention(self, x):
         kernel_attention = self.kernel_fc(x).view(x.size(0), -1, 1, 1, 1, 1)
         kernel_attention = F.softmax(kernel_attention / self.temperature, dim=1)
         return kernel_attention
     
-    # Ç°Ïò´«²¥
+    # å‰å‘ä¼ æ’­
     def forward(self, x):
-        x = self.avgpool(x)  # È«¾ÖÆ½¾ù³Ø»¯
-        x = self.fc(x)  # Í¨µÀËõ¼õ
-        x = self.bn_1(x)  # ²ã¹éÒ»»¯
-        x = self.relu(x)  # ReLU¼¤»î
-        # ·µ»ØÍ¨µÀ¡¢ÂË²¨¡¢¿Õ¼äºÍÄÚºË×¢ÒâÁ¦
+        x = self.avgpool(x)  # å…¨å±€å¹³å‡æ± åŒ–
+        x = self.fc(x)  # é€šé“ç¼©å‡
+        x = self.bn_1(x)  # å±‚å½’ä¸€åŒ–
+        x = self.relu(x)  # ReLUæ¿€æ´»
+        # è¿”å›é€šé“ã€æ»¤æ³¢ã€ç©ºé—´å’Œå†…æ ¸æ³¨æ„åŠ›
         return self.func_channel(x), self.func_filter(x), self.func_spatial(x), self.func_kernel(x)
 
 
-# ¶¨Òå ODConv2d Àà£¬¼Ì³Ğ×Ô nn.Module
+# å®šä¹‰ ODConv2d ç±»ï¼Œç»§æ‰¿è‡ª nn.Module
 class ODConv2d(nn.Module):
     def __init__(self,
-                 in_planes,  # ÊäÈëÍ¨µÀÊı
-                 out_planes,  # Êä³öÍ¨µÀÊı
-                 kernel_size=3,  # ¾í»ıºË´óĞ¡£¬Ä¬ÈÏÎª3
-                 stride=1,  # ²½·ù£¬Ä¬ÈÏÎª1
-                 padding=0,  # Ìî³ä´óĞ¡£¬Ä¬ÈÏÎª0
-                 dilation=1,  # ÅòÕÍÏµÊı£¬Ä¬ÈÏÎª1
-                 groups=1,  # ·Ö×é¾í»ıÊı£¬Ä¬ÈÏÎª1
-                 reduction=0.0625,  # Í¨µÀËõ¼õ±ÈÀı
-                 kernel_num=1):  # ºËĞÄÊıÁ¿
+                 in_planes,  # è¾“å…¥é€šé“æ•°
+                 out_planes,  # è¾“å‡ºé€šé“æ•°
+                 kernel_size=3,  # å·ç§¯æ ¸å¤§å°ï¼Œé»˜è®¤ä¸º3
+                 stride=1,  # æ­¥å¹…ï¼Œé»˜è®¤ä¸º1
+                 padding=0,  # å¡«å……å¤§å°ï¼Œé»˜è®¤ä¸º0
+                 dilation=1,  # è†¨èƒ€ç³»æ•°ï¼Œé»˜è®¤ä¸º1
+                 groups=1,  # åˆ†ç»„å·ç§¯æ•°ï¼Œé»˜è®¤ä¸º1
+                 reduction=0.0625,  # é€šé“ç¼©å‡æ¯”ä¾‹
+                 kernel_num=1):  # æ ¸å¿ƒæ•°é‡
         super(ODConv2d, self).__init__()
         self.in_planes = in_planes
         self.out_planes = out_planes
@@ -144,76 +144,76 @@ class ODConv2d(nn.Module):
         self.dilation = dilation
         self.groups = groups
         self.kernel_num = kernel_num
-        # ¶¨ÒåAttention¶ÔÏó£¬ÊµÏÖ¶àÖÖ×¢ÒâÁ¦»úÖÆ
+        # å®šä¹‰Attentionå¯¹è±¡ï¼Œå®ç°å¤šç§æ³¨æ„åŠ›æœºåˆ¶
         self.attention = Attention(in_planes, out_planes, kernel_size, groups=groups,
                                    reduction=reduction, kernel_num=kernel_num)
-        # ¶¨Òå¿ÉÑ§Ï°µÄÈ¨ÖØ²ÎÊı£¬shapeÎª£¨kernel_num£¬Êä³öÍ¨µÀÊı£¬ÊäÈëÍ¨µÀÊı/×éÊı£¬¾í»ıºË´óĞ¡£¬¾í»ıºË´óĞ¡£©
+        # å®šä¹‰å¯å­¦ä¹ çš„æƒé‡å‚æ•°ï¼Œshapeä¸ºï¼ˆkernel_numï¼Œè¾“å‡ºé€šé“æ•°ï¼Œè¾“å…¥é€šé“æ•°/ç»„æ•°ï¼Œå·ç§¯æ ¸å¤§å°ï¼Œå·ç§¯æ ¸å¤§å°ï¼‰
         self.weight = nn.Parameter(torch.randn(kernel_num, out_planes, in_planes // groups, kernel_size, kernel_size),
                                    requires_grad=True)
-        self._initialize_weights()  # ³õÊ¼»¯È¨ÖØ
+        self._initialize_weights()  # åˆå§‹åŒ–æƒé‡
 
-        # Èç¹ûÎª1x1¾í»ıÇÒºËĞÄÊıÁ¿Îª1£¬ÔòÑ¡ÔñÌØÊâµÄÊµÏÖ·½Ê½
+        # å¦‚æœä¸º1x1å·ç§¯ä¸”æ ¸å¿ƒæ•°é‡ä¸º1ï¼Œåˆ™é€‰æ‹©ç‰¹æ®Šçš„å®ç°æ–¹å¼
         if self.kernel_size == 1 and self.kernel_num == 1:
             self._forward_impl = self._forward_impl_pw1x
         else:
-            self._forward_impl = self._forward_impl_common  # ·ñÔòÑ¡ÔñÍ¨ÓÃÊµÏÖ·½Ê½
+            self._forward_impl = self._forward_impl_common  # å¦åˆ™é€‰æ‹©é€šç”¨å®ç°æ–¹å¼
 
-    # ³õÊ¼»¯È¨ÖØ·½·¨
+    # åˆå§‹åŒ–æƒé‡æ–¹æ³•
     def _initialize_weights(self):
         for i in range(self.kernel_num):
             nn.init.kaiming_normal_(self.weight[i], mode='fan_out', nonlinearity='relu')
 
-    # ¸üĞÂAttentionÎÂ¶È²ÎÊı
+    # æ›´æ–°Attentionæ¸©åº¦å‚æ•°
     def update_temperature(self, temperature):
         self.attention.update_temperature(temperature)
 
-    # Í¨ÓÃÇ°Ïò´«²¥ÊµÏÖ·½Ê½
+    # é€šç”¨å‰å‘ä¼ æ’­å®ç°æ–¹å¼
     def _forward_impl_common(self, x):
-        # »ñÈ¡Í¨µÀ×¢ÒâÁ¦¡¢ÂË²¨×¢ÒâÁ¦¡¢¿Õ¼ä×¢ÒâÁ¦ºÍºËĞÄ×¢ÒâÁ¦
+        # è·å–é€šé“æ³¨æ„åŠ›ã€æ»¤æ³¢æ³¨æ„åŠ›ã€ç©ºé—´æ³¨æ„åŠ›å’Œæ ¸å¿ƒæ³¨æ„åŠ›
         channel_attention, filter_attention, spatial_attention, kernel_attention = self.attention(x)
         batch_size, in_planes, height, width = x.size()
-        x = x * channel_attention  # Ó¦ÓÃÍ¨µÀ×¢ÒâÁ¦
-        x = x.reshape(1, -1, height, width)  # ÖØËÜÎª1Î¬Åú´ÎÊı¾İ
+        x = x * channel_attention  # åº”ç”¨é€šé“æ³¨æ„åŠ›
+        x = x.reshape(1, -1, height, width)  # é‡å¡‘ä¸º1ç»´æ‰¹æ¬¡æ•°æ®
 
-        # ¼ÆËã¾ÛºÏÈ¨ÖØ£¬½«¿Õ¼ä¡¢ºËĞÄºÍÔ­Ê¼È¨ÖØ½áºÏ
+        # è®¡ç®—èšåˆæƒé‡ï¼Œå°†ç©ºé—´ã€æ ¸å¿ƒå’ŒåŸå§‹æƒé‡ç»“åˆ
         aggregate_weight = spatial_attention * kernel_attention * self.weight.unsqueeze(dim=0)
-        # ¾ÛºÏºóµÄÈ¨ÖØ°´ÒªÇóĞÎ×´½øĞĞÖØËÜ
+        # èšåˆåçš„æƒé‡æŒ‰è¦æ±‚å½¢çŠ¶è¿›è¡Œé‡å¡‘
         aggregate_weight = torch.sum(aggregate_weight, dim=1).view(
             [-1, self.in_planes // self.groups, self.kernel_size, self.kernel_size])
 
-        # Ê¹ÓÃ¾ÛºÏºóµÄÈ¨ÖØ½øĞĞ¾í»ı²Ù×÷
+        # ä½¿ç”¨èšåˆåçš„æƒé‡è¿›è¡Œå·ç§¯æ“ä½œ
         output = F.conv2d(x, weight=aggregate_weight, bias=None, stride=self.stride, padding=self.padding,
                           dilation=self.dilation, groups=self.groups * batch_size)
-        # ½«Êä³ö½á¹û»Ö¸´³ÉÅú´ÎĞÎ×´£¬²¢Ó¦ÓÃÂË²¨×¢ÒâÁ¦
+        # å°†è¾“å‡ºç»“æœæ¢å¤æˆæ‰¹æ¬¡å½¢çŠ¶ï¼Œå¹¶åº”ç”¨æ»¤æ³¢æ³¨æ„åŠ›
         output = output.view(batch_size, self.out_planes, output.size(-2), output.size(-1))
-        output = output * filter_attention  # Ó¦ÓÃÂË²¨×¢ÒâÁ¦
+        output = output * filter_attention  # åº”ç”¨æ»¤æ³¢æ³¨æ„åŠ›
         return output
 
-    # ÌØ¶¨1x1¾í»ıµÄÇ°Ïò´«²¥ÊµÏÖ
+    # ç‰¹å®š1x1å·ç§¯çš„å‰å‘ä¼ æ’­å®ç°
     def _forward_impl_pw1x(self, x):
-        # »ñÈ¡Í¨µÀ×¢ÒâÁ¦¡¢ÂË²¨×¢ÒâÁ¦¡¢¿Õ¼ä×¢ÒâÁ¦ºÍºËĞÄ×¢ÒâÁ¦
+        # è·å–é€šé“æ³¨æ„åŠ›ã€æ»¤æ³¢æ³¨æ„åŠ›ã€ç©ºé—´æ³¨æ„åŠ›å’Œæ ¸å¿ƒæ³¨æ„åŠ›
         channel_attention, filter_attention, spatial_attention, kernel_attention = self.attention(x)
-        x = x * channel_attention  # Ó¦ÓÃÍ¨µÀ×¢ÒâÁ¦
+        x = x * channel_attention  # åº”ç”¨é€šé“æ³¨æ„åŠ›
 
-        # Ö±½ÓÊ¹ÓÃÈ¨ÖØ½øĞĞ¾í»ı²Ù×÷
+        # ç›´æ¥ä½¿ç”¨æƒé‡è¿›è¡Œå·ç§¯æ“ä½œ
         output = F.conv2d(x, weight=self.weight.squeeze(dim=0), bias=None, stride=self.stride, padding=self.padding,
                           dilation=self.dilation, groups=self.groups)
-        output = output * filter_attention  # Ó¦ÓÃÂË²¨×¢ÒâÁ¦
+        output = output * filter_attention  # åº”ç”¨æ»¤æ³¢æ³¨æ„åŠ›
         return output
 
-    # Ç°Ïò´«²¥·½·¨
+    # å‰å‘ä¼ æ’­æ–¹æ³•
     def forward(self, x):
-        return self._forward_impl(x)  # µ÷ÓÃÑ¡¶¨µÄÊµÏÖ·½Ê½
+        return self._forward_impl(x)  # è°ƒç”¨é€‰å®šçš„å®ç°æ–¹å¼
 
 if __name__ == '__main__':
-    # È·¶¨Éè±¸£¬Èç¹ûÓĞGPUÔòÊ¹ÓÃ
+    # ç¡®å®šè®¾å¤‡ï¼Œå¦‚æœæœ‰GPUåˆ™ä½¿ç”¨
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    # ´´½¨Ò»¸öÊäÈëÕÅÁ¿£¬ĞÎ×´Îª [1, 32, 256, 256] ²¢·ÅÖÃµ½Éè±¸ÉÏ
+    # åˆ›å»ºä¸€ä¸ªè¾“å…¥å¼ é‡ï¼Œå½¢çŠ¶ä¸º [1, 32, 256, 256] å¹¶æ”¾ç½®åˆ°è®¾å¤‡ä¸Š
     input = torch.randn(1,32,256,256).to(device)
-    # ÊµÀı»¯ odconv ¾í»ı²ã
+    # å®ä¾‹åŒ– odconv å·ç§¯å±‚
     odconv = ODConv(32, 64).to(device)
-    # Í¨¹ı¾í»ı²ã¼ÆËãÊä³ö
+    # é€šè¿‡å·ç§¯å±‚è®¡ç®—è¾“å‡º
     output = odconv(input)
-    # ´òÓ¡ÊäÈëºÍÊä³öµÄĞÎ×´
+    # æ‰“å°è¾“å…¥å’Œè¾“å‡ºçš„å½¢çŠ¶
     print(input.shape)
     print(output.shape)
