@@ -5,15 +5,18 @@
 ## Plug-play-modules（即插即用模块）
 2025年全网最全即插即用模块，包含各种卷积变种、最新注意力机制、特征融合模块、上下采样模块，适用于AI人工智能、深度学习、计算机视觉CV领域，适用于图像分类、目标检测、实例分割、语义分割、单目标跟踪（SOT）、多目标跟踪（MOT）、红外目标跟踪（RGBT）、图像去雨、去雾、去模糊、超分等任务，持续更新中......
 # 论文解读
-### 1. [可变形卷积 (CVPR 2019) DCNv2.py](https://github.com/AIFengheshu/Plug-play-modules/blob/main/(CVPR%202019)%20DCNv2.py)
 
-题目：Deformable ConvNets v2: More Deformable, Better Results
+### 1. [动态滤波模块 (AAAI 2024) DynamicFilter.py](https://github.com/AIFengheshu/Plug-play-modules/blob/main/(AAAI%202024)%20DynamicFilter.py)
 
-地址：https://arxiv.org/pdf/1811.11168
+题目：FFT-based Dynamic Token Mixer for Vision
 
-![image](https://github.com/user-attachments/assets/da7a0a6c-9f9a-4612-b33b-8e933005ac95)
+中文题目：基于FFT的动态令牌混合器在视觉中的应用
 
-论文解读：[可变形卷积（DCNv2），即插即用，直接替换普通卷积，助力模型涨点！增强网络特征提取能力！](https://mp.weixin.qq.com/s/ptGGWtCmsJqxKLGAbYHwLA)
+地址：https://arxiv.org/pdf/2303.03932
+
+![image](https://github.com/user-attachments/assets/a94aebac-98b5-40de-96c6-7ec30e3853c0)
+
+论文解读：[【AAAI 2024】计算复杂度更低，基于FFT的动态滤波器模块，即插即用](https://mp.weixin.qq.com/s/Kv_cc31-n27LuSgt10MBTA)
 
 ### 2. [小波卷积 (ECCV 2024) WTConv.py](https://github.com/AIFengheshu/Plug-play-modules/blob/main/(ECCV%202024)%20WTConv.py)
 
@@ -55,17 +58,15 @@
 
 论文解读：[【ECCV 2024】新注意力范式——Agent Attention，整合Softmax与线性注意力](https://mp.weixin.qq.com/s/giFUFLCCA5WLHnq_kF3NpQ)
 
-### 6. [动态滤波模块 (AAAI 2024) DynamicFilter.py](https://github.com/AIFengheshu/Plug-play-modules/blob/main/(AAAI%202024)%20DynamicFilter.py)
+### 6. [可变形卷积 (CVPR 2019) DCNv2.py](https://github.com/AIFengheshu/Plug-play-modules/blob/main/(CVPR%202019)%20DCNv2.py)
 
-题目：FFT-based Dynamic Token Mixer for Vision
+题目：Deformable ConvNets v2: More Deformable, Better Results
 
-中文题目：基于FFT的动态令牌混合器在视觉中的应用
+地址：https://arxiv.org/pdf/1811.11168
 
-地址：https://arxiv.org/pdf/2303.03932
+![image](https://github.com/user-attachments/assets/da7a0a6c-9f9a-4612-b33b-8e933005ac95)
 
-![image](https://github.com/user-attachments/assets/a94aebac-98b5-40de-96c6-7ec30e3853c0)
-
-论文解读：[【AAAI 2024】计算复杂度更低，基于FFT的动态滤波器模块，即插即用](https://mp.weixin.qq.com/s/Kv_cc31-n27LuSgt10MBTA)
+论文解读：[可变形卷积（DCNv2），即插即用，直接替换普通卷积，助力模型涨点！增强网络特征提取能力！](https://mp.weixin.qq.com/s/ptGGWtCmsJqxKLGAbYHwLA)
 
 ### 7. [高效多尺度注意力 (ICCASSP 2023) EMA.py](https://github.com/AIFengheshu/Plug-play-modules/blob/main/(ICCASSP%202023)%20EMA.py)
 
@@ -175,3 +176,34 @@ SimAM:一种用于卷积神经网络的简单、无参数的注意力模块
 
 论文解读：[【CVPR 2024】上下文锚点注意力CAA，即插即用，助力目标检测涨点！](https://mp.weixin.qq.com/s/KjtmN4OWf7AiivV5cvuOSQ)
 
+### 15. [线性可变形卷积LDConv (IVC 2024)LDConv.py](https://github.com/AIFengheshu/Plug-play-modules/blob/main/(IVC%202024)LDConv.py)
+
+论文题目：LDConv: Linear deformable convoluton for improving convolutioanl neural networks
+
+中文题目:  LDConv：用于改进卷积神经网络的线性可变形卷积
+
+论文链接：https://doi.org/10.1016/j.imavis.2024.105190
+
+所属机构：重庆师范大学，西南大学
+
+关键词：新型卷积操作、任意采样形状、任意数量的参数、目标检测
+
+![image](https://github.com/user-attachments/assets/bcb557aa-015b-40a9-81e7-44f2b4df4f25)
+
+论文解读：[【IVC 2024】线性可变形卷积LDConv，即插即用，高效提取特征，YOLO网络涨点神器！](https://mp.weixin.qq.com/s/rBZqtUM-87hHBNtuVgElCA)
+
+### 16. [全维度动态卷积ODConv (ICLR 2022) ODConv.py](https://github.com/AIFengheshu/Plug-play-modules/blob/main/(ICLR%202022)%20ODConv.py)
+
+论文题目：Omni-Dimensional Dynamic Convolution
+
+中文题目:  全维度动态卷积论文链接：https://openreview.net/pdf?id=DmpCfq6Mg39
+
+官方github：https://github.com/OSVAI/ODConv
+
+所属机构：英特尔中国实验室，香港中文大学-商汤科技联合实验室
+
+关键词：动态卷积, 注意力机制, 卷积核空间, 深度学习, 计算机视觉
+
+![image](https://github.com/user-attachments/assets/de920e27-0e5c-4214-be9f-35b6bd565efb)
+
+论文解读：[【ICLR 2022】全维度动态卷积ODConv，即插即用，用于CV所有任务涨点！](https://mp.weixin.qq.com/s/Q-eS1Jt8K5Ri2LUd_PLxlA)
