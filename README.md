@@ -1,9 +1,9 @@
-<img src="./img/公众号.gif" width="50%" height="auto">
+![image](https://github.com/user-attachments/assets/3c4006ae-0da9-4a9e-bea5-e0437345aba7)
 
 ## 最新更新请关注微信公众号【AI缝合术】
 
 ## Plug-play-modules（即插即用模块）
-2024年全网最全即插即用模块，包含各种卷积变种、最新注意力机制、特征融合模块、上下采样模块，适用于AI人工智能、深度学习、计算机视觉CV领域，适用于图像分类、目标检测、实例分割、语义分割、单目标跟踪（SOT）、多目标跟踪（MOT）、红外目标跟踪（RGBT）、图像去雨、去雾、去模糊、超分等任务，持续更新中......
+2025年全网最全即插即用模块，包含各种卷积变种、最新注意力机制、特征融合模块、上下采样模块，适用于AI人工智能、深度学习、计算机视觉CV领域，适用于图像分类、目标检测、实例分割、语义分割、单目标跟踪（SOT）、多目标跟踪（MOT）、红外目标跟踪（RGBT）、图像去雨、去雾、去模糊、超分等任务，持续更新中......
 # 论文解读
 ### 1. [可变形卷积 (CVPR 2019) DCNv2.py](https://github.com/AIFengheshu/Plug-play-modules/blob/main/(CVPR%202019)%20DCNv2.py)
 
@@ -141,7 +141,7 @@ SimAM:一种用于卷积神经网络的简单、无参数的注意力模块
 
 论文链接：https://www.sciencedirect.com/science/article/pii/S0031320323005174
 
-![image](https://github.com/user-attachments/assets/7ae07fd3-b19b-4e37-9beb-99fdaae996d8)
+![image](https://github.com/user-attachments/assets/c3cdccda-4357-45a3-a6e6-97a54404a934)
 
 论文解读：[【PR 2023】Haar小波下采样，即插即用，几行代码，简单有效提高语义分割准确性](https://mp.weixin.qq.com/s/n1YQeSN2dOcB8cIm3RLXOw)
 
