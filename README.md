@@ -11,7 +11,7 @@
 
 地址：https://arxiv.org/pdf/1811.11168
 
-![Uploading image.png…]()
+![image](https://github.com/user-attachments/assets/da7a0a6c-9f9a-4612-b33b-8e933005ac95)
 
 论文解读：[可变形卷积（DCNv2），即插即用，直接替换普通卷积，助力模型涨点！增强网络特征提取能力！](https://mp.weixin.qq.com/s/ptGGWtCmsJqxKLGAbYHwLA)
 
