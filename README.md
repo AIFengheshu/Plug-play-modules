@@ -11,7 +11,7 @@
 
 地址：https://arxiv.org/pdf/1811.11168
 
-![image](https://github.com/user-attachments/assets/5dcb2a89-bedd-49fc-9f22-99e4ca77406b)
+![Uploading image.png…]()
 
 论文解读：[可变形卷积（DCNv2），即插即用，直接替换普通卷积，助力模型涨点！增强网络特征提取能力！](https://mp.weixin.qq.com/s/ptGGWtCmsJqxKLGAbYHwLA)
 
@@ -158,7 +158,6 @@ SimAM:一种用于卷积神经网络的简单、无参数的注意力模块
 关键词：多语义信息，语义差异，空间注意力，通道注意力，协同效应
 
 ![image](https://github.com/user-attachments/assets/182f1a60-496b-4607-a512-f9abc8c9a5fd)
-
 
 论文解读：[【arXiv 2024】最新！空间和通道协同注意力SCSA，即插即用，分类、检测、分割涨点！](https://mp.weixin.qq.com/s/RK-bVHt8-D5dCUI1yJ5NpA)
 
