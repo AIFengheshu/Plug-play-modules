@@ -161,3 +161,17 @@ SimAM:一种用于卷积神经网络的简单、无参数的注意力模块
 
 论文解读：[【arXiv 2024】最新！空间和通道协同注意力SCSA，即插即用，分类、检测、分割涨点！](https://mp.weixin.qq.com/s/RK-bVHt8-D5dCUI1yJ5NpA)
 
+### 14. [上下文锚点注意力CAA (CVPR 2024) CAA.py](https://github.com/AIFengheshu/Plug-play-modules/blob/main/(CVPR%202024)%20CAA.py)
+
+论文题目：Poly Kernel Inception Network for Remote Sensing Detection
+
+中文题目:  面向遥感检测的多核Inception
+
+网络论文链接：https://openaccess.thecvf.com/content/CVPR2024/papers/Cai_Poly_Kernel_Inception_Network_for_Remote_Sensing_Detection_CVPR_2024_paper.pdf
+
+所属机构：南京理工大学, 中国传媒大学, 浙江大学关键词：遥感图像, 目标检测, 多尺度卷积核, 上下文锚点注意力, PKINet
+
+![image](https://github.com/user-attachments/assets/04a36fd7-7ca2-446d-853e-a11b1678706e)
+
+论文解读：[【CVPR 2024】上下文锚点注意力CAA，即插即用，助力目标检测涨点！](https://mp.weixin.qq.com/s/KjtmN4OWf7AiivV5cvuOSQ)
+
