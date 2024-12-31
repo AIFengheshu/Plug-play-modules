@@ -21,7 +21,7 @@
 
 地址：https://arxiv.org/pdf/2407.05848v2
 
-![image](https://github.com/user-attachments/assets/547dbf5d-53aa-4f22-b542-89135369830c)
+![image](https://github.com/user-attachments/assets/52e02a5f-93a8-4f62-9cfe-0da99fffea87)
 
 论文解读：[【ECCV 2024】大感受野的小波卷积，即插即用，显著提高CNN的有效感受野](https://mp.weixin.qq.com/s/I3Qh1yPWbr9sqEql1DAsjg)
 
@@ -31,7 +31,7 @@
 
 地址：https://arxiv.org/pdf/2408.12879
 
-![image](https://github.com/user-attachments/assets/7fc4c6e4-d89a-4d3d-97d5-1e02e0974d94)
+![image](https://github.com/user-attachments/assets/606f7faa-44c5-43e0-9a08-cbd578762d4c)
 
 论文解读：[【TPAMI 2024】即插即用的FreqFusion特征融合模块，语义分割、目标检测、实例分割和全景分割统统涨点！](https://mp.weixin.qq.com/s/u5gmg66VnFGzKCiMTHGyRw)
 
@@ -41,7 +41,7 @@
 
 地址：https://arxiv.org/pdf/1706.03762
 
-![image](https://github.com/user-attachments/assets/e467c9aa-f991-413f-9055-64dd4f934b01)
+![image](https://github.com/user-attachments/assets/3c16748d-6fda-4f03-bc2b-f29ebabf6c05)
 
 论文解读：[【被引13w+】Scaled Dot-Product Attention（缩放点积注意力），被引最高的注意力机制](https://mp.weixin.qq.com/s/lAxZmKu8jgO-kALtv-uBgg)
 
@@ -51,7 +51,7 @@
 
 地址：https://arxiv.org/pdf/2312.08874
 
-![image](https://github.com/user-attachments/assets/a7b3c954-30af-4a02-bf06-1c64a04d87bc)
+![image](https://github.com/user-attachments/assets/59cc83ea-605f-45d2-9065-82bae343d92c)
 
 论文解读：[【ECCV 2024】新注意力范式——Agent Attention，整合Softmax与线性注意力](https://mp.weixin.qq.com/s/giFUFLCCA5WLHnq_kF3NpQ)
 
@@ -63,7 +63,7 @@
 
 地址：https://arxiv.org/pdf/2303.03932
 
-![image](https://github.com/user-attachments/assets/517e55f9-8d0e-480e-9d07-d4ef81fe43c3)
+![image](https://github.com/user-attachments/assets/a94aebac-98b5-40de-96c6-7ec30e3853c0)
 
 论文解读：[【AAAI 2024】计算复杂度更低，基于FFT的动态滤波器模块，即插即用](https://mp.weixin.qq.com/s/Kv_cc31-n27LuSgt10MBTA)
 
@@ -75,7 +75,7 @@
 
 地址：https://arxiv.org/pdf/2305.13563v2
 
-![image](https://github.com/user-attachments/assets/b308683b-67d5-4a26-bdd9-ea2bd149e3bf)
+![image](https://github.com/user-attachments/assets/a1006ff0-52bd-4399-8b55-07eb61935bef)
 
 论文解读：[【ICCASSP 2023】即插即用的高效多尺度注意力EMA，战胜SE、CBAM、SA、CA等注意力](https://mp.weixin.qq.com/s/F7G1LvO4N_HX5wooLztCew)
 
@@ -87,7 +87,7 @@ SimAM:一种用于卷积神经网络的简单、无参数的注意力模块
 
 论文链接：http://proceedings.mlr.press/v139/yang21o/yang21o.pdf
 
-![image](https://github.com/user-attachments/assets/a8531872-1241-4027-bbcf-656e57e43643)
+![image](https://github.com/user-attachments/assets/7d93efc5-e2a6-43f2-aeee-8ac9db198a2e)
 
 论文解读：[【ICML 2021】无参数注意力模块SimAM，即插即用，不超过10行代码，有效涨点！](https://mp.weixin.qq.com/s/OI5RYlm100Lpiqjxj1e0-g)
 
@@ -99,7 +99,7 @@ SimAM:一种用于卷积神经网络的简单、无参数的注意力模块
 
 论文链接：https://arxiv.org/pdf/2303.03667
 
-![image](https://github.com/user-attachments/assets/8794b17f-f9dd-4ad5-85aa-05a32299e51e)
+![image](https://github.com/user-attachments/assets/82a037ed-c270-460c-ad17-5867677f0d60)
 
 论文解读：[【CVPR 2023】部分卷积（PConv），简单有效，即插即用，快速涨点](https://mp.weixin.qq.com/s/6tss5ZaOoolnzfbK4eKm-A)
 
@@ -115,7 +115,7 @@ SimAM:一种用于卷积神经网络的简单、无参数的注意力模块
 
 关键词： 遥感，CNN骨干，大核，注意力，目标检测，语义分割
 
-![image](https://github.com/user-attachments/assets/94a9f778-be6a-4193-a5f0-671c82669cb6)
+![image](https://github.com/user-attachments/assets/d59bd472-2765-42ef-a76a-9aadd1b414f0)
 
 论文解读：[【IJCV 2024】大选择核模块LSK，可当作卷积块进行替换，即插即用，极大增加感受野](https://mp.weixin.qq.com/s/G9gLLbfUV0FzRn-vczREQA)
 
@@ -129,7 +129,7 @@ SimAM:一种用于卷积神经网络的简单、无参数的注意力模块
 
 所属机构: Sea AI Lab和新加坡国立大学
 
-![image](https://github.com/user-attachments/assets/c76d2d73-c6eb-451f-89c8-69a8b2b55c75)
+![image](https://github.com/user-attachments/assets/6670b07c-d50d-460e-9418-a387453477b7)
 
 论文解读：[【TPAMI 2022】Outlook Attention，即插即用，捕捉细节和局部特征，助力模型涨点](https://mp.weixin.qq.com/s/v4AWmS0dP4vyTmvtoIPxqA)
 
@@ -157,7 +157,7 @@ SimAM:一种用于卷积神经网络的简单、无参数的注意力模块
 
 关键词：多语义信息，语义差异，空间注意力，通道注意力，协同效应
 
-![image](https://github.com/user-attachments/assets/182f1a60-496b-4607-a512-f9abc8c9a5fd)
+![image](https://github.com/user-attachments/assets/973ff9d4-ab46-4256-98b2-6e60cd11a156)
 
 论文解读：[【arXiv 2024】最新！空间和通道协同注意力SCSA，即插即用，分类、检测、分割涨点！](https://mp.weixin.qq.com/s/RK-bVHt8-D5dCUI1yJ5NpA)
 
