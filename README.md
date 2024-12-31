@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/3c4006ae-0da9-4a9e-bea5-e0437345aba7)
+![image](https://github.com/user-attachments/assets/79c2ce21-6442-411c-85a6-164cf28ad885)
 
 ## 最新更新请关注微信公众号【AI缝合术】
 
