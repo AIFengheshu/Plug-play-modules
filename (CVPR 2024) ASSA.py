@@ -3,16 +3,12 @@ import torch.nn as nn
 from timm.models.layers import trunc_normal_
 from einops import repeat
 
-# 论文：Adapt or Perish: Adaptive Sparse Transformer with Attentive Feature Refinement for Image Restoration, CVPR 2024.
-# 论文地址：https://openaccess.thecvf.com/content/CVPR2024/papers/Zhou_Adapt_or_Perish_Adaptive_Sparse_Transformer_with_Attentive_Feature_Refinement_CVPR_2024_paper.pdf
-# 微信公众号：AI缝合术
-"""
-2024年全网最全即插即用模块,全部免费!包含各种卷积变种、最新注意力机制、特征融合模块、上下采样模块，
-适用于人工智能(AI)、深度学习、计算机视觉(CV)领域，适用于图像分类、目标检测、实例分割、语义分割、
-单目标跟踪(SOT)、多目标跟踪(MOT)、红外与可见光图像融合跟踪(RGBT)、图像去噪、去雨、去雾、去模糊、超分等任务，
-模块库持续更新中......
-https://github.com/AIFengheshu/Plug-play-modules
-"""
+# 论文题目：Adapt or Perish: Adaptive Sparse Transformer with Attentive Feature Refinement for Image Restoration
+# 中文题目：适应或消亡：具有关注特征的自适应稀疏Transformer用于修复图像
+# 论文链接：https://openaccess.thecvf.com/content/CVPR2024/papers/Zhou_Adapt_or_Perish_Adaptive_Sparse_Transformer_with_Attentive_Feature_Refinement_CVPR_2024_paper.pdf
+# 官方github：https://github.com/joshyZhou/AST
+# 所属机构：南开大学计算机科学学院 VCIP & TMCC & DISSec，南开国际先进研究院（深圳·福田），南京理工大学计算机科学与工程学院
+# 代码整理：微信公众号《AI缝合术》
 class LinearProjection(nn.Module):
     def __init__(self, dim, heads = 8, dim_head = 64, bias=True):
         super().__init__()
@@ -114,18 +110,12 @@ class WindowAttention_sparse(nn.Module):
         x = self.proj_drop(x)
         return x
 
-
 if __name__ == '__main__':
-    # Instantiate the WindowAttention_sparse class
-    dim = 64  # Dimension of input features
-    win_size = (64, 64)  # Window size(H, W)
-    # Create an instance of the WindowAttention_sparse module
+    dim = 64 
+    win_size = (64, 64) 
     window_attention_sparse = WindowAttention_sparse(dim, win_size)
-    C = dim
-    input = torch.randn(1, 64 * 64, C)#输入B H W
-    # Forward pass
+    input = torch.randn(1, 64 * 64, 64) # 输入B H*W C
+    print(window_attention_sparse)
     output = window_attention_sparse(input)
-
-    # Print input and output size
-    print(input.size())
-    print(output.size())
+    print("input shape:", input.shape)
+    print("output shape:", output.shape)
