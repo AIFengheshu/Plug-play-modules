@@ -1,12 +1,12 @@
 import torch
 import torch.nn as nn
 
-# ÂÛÎÄÌâÄ¿£ºPinwheel-shaped Convolution and Scale-based Dynamic Loss for Infrared Small Target Detection
-# ÖĞÎÄÌâÄ¿£º·ç³µĞÎ×´µÄ¾í»ıºÍ»ùÓÚ³ß¶ÈµÄ¶¯Ì¬ËğÊ§ÓÃÓÚºìÍâĞ¡Ä¿±ê¼ì²â
-# ÂÛÎÄÁ´½Ó£ºhttps://arxiv.org/pdf/2412.16986
-# ¹Ù·½github£ºhttps://github.com/JN-Yang/PConv-SDloss-Data
-# ËùÊô»ú¹¹£ºÎ÷ÄÏ¿Æ¼¼´óÑ§ĞÅÏ¢Óë¹¤³ÌÑ§Ôº£¬ÄÏ¾©Àí¹¤´óÑ§µç×ÓÓë¹âÑ§¹¤³ÌÑ§Ôº
-# ´úÂëÕûÀí£ºÎ¢ĞÅ¹«ÖÚºÅ¡¶AI·ìºÏÊõ¡·
+# è®ºæ–‡é¢˜ç›®ï¼šPinwheel-shaped Convolution and Scale-based Dynamic Loss for Infrared Small Target Detection
+# ä¸­æ–‡é¢˜ç›®ï¼šé£è½¦å½¢çŠ¶çš„å·ç§¯å’ŒåŸºäºå°ºåº¦çš„åŠ¨æ€æŸå¤±ç”¨äºçº¢å¤–å°ç›®æ ‡æ£€æµ‹
+# è®ºæ–‡é“¾æ¥ï¼šhttps://arxiv.org/pdf/2412.16986
+# å®˜æ–¹githubï¼šhttps://github.com/JN-Yang/PConv-SDloss-Data
+# æ‰€å±æœºæ„ï¼šè¥¿å—ç§‘æŠ€å¤§å­¦ä¿¡æ¯ä¸å·¥ç¨‹å­¦é™¢ï¼Œå—äº¬ç†å·¥å¤§å­¦ç”µå­ä¸å…‰å­¦å·¥ç¨‹å­¦é™¢
+# ä»£ç æ•´ç†ï¼šå¾®ä¿¡å…¬ä¼—å·ã€ŠAIç¼åˆæœ¯ã€‹
 
 def autopad(k, p=None, d=1):  # kernel, padding, dilation
     """Pad to 'same' shape outputs."""
@@ -61,20 +61,20 @@ class Pinwheel_shapedConv(nn.Module):
     
 if __name__ == "__main__":
 
-    # ½«Ä£¿éÒÆ¶¯µ½ GPU£¨Èç¹û¿ÉÓÃ£©
+    # å°†æ¨¡å—ç§»åŠ¨åˆ° GPUï¼ˆå¦‚æœå¯ç”¨ï¼‰
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    # ´´½¨²âÊÔÊäÈëÕÅÁ¿ (batch_size, channels, height, width)
+    # åˆ›å»ºæµ‹è¯•è¾“å…¥å¼ é‡ (batch_size, channels, height, width)
     x = torch.randn(1, 32, 256, 256).to(device)
 
-    # ³õÊ¼»¯ pconv Ä£¿é
+    # åˆå§‹åŒ– pconv æ¨¡å—
     pconv = Pinwheel_shapedConv(c1=32, c2=64, k=3, s=1)
     print(pconv)
     pconv = pconv.to(device)
 
-    # Ç°Ïò´«²¥
+    # å‰å‘ä¼ æ’­
     output = pconv(x)
 
-    # ´òÓ¡ÊäÈëºÍÊä³öÕÅÁ¿µÄĞÎ×´
-    print("ÊäÈëÕÅÁ¿ĞÎ×´:", x.shape)
-    print("Êä³öÕÅÁ¿ĞÎ×´:", output.shape)
+    # æ‰“å°è¾“å…¥å’Œè¾“å‡ºå¼ é‡çš„å½¢çŠ¶
+    print("è¾“å…¥å¼ é‡å½¢çŠ¶:", x.shape)
+    print("è¾“å‡ºå¼ é‡å½¢çŠ¶:", output.shape)
