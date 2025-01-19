@@ -1,13 +1,13 @@
 import torch
 import torch.nn as nn
 
-# ÂÛÎÄÌâÄ¿£ºConv2Former: A Simple Transformer-Style ConvNet for Visual Recognition
-# ÖĞÎÄÌâÄ¿£ºConv2Former: Ò»ÖÖ¼òµ¥µÄÊÓ¾õÊ¶±ğÓÃµÄTransformer·ç¸ñ¾í»ıÍøÂç
-# ÂÛÎÄÁ´½Ó£ºhttps://arxiv.org/pdf/2211.11943
-# ¹Ù·½github£ºhttps://github.com/HVision-NKU/Conv2Former
-# ËùÊô»ú¹¹£ºÌì½òÄÏ¿ª´óÑ§¼ÆËã»ú¿ÆÑ§Ñ§Ôº£¬×Ö½ÚÌø¶¯£¨ĞÂ¼ÓÆÂ£©
-# ´úÂëÕûÀí£ºÎ¢ĞÅ¹«ÖÚºÅ¡¶AI·ìºÏÊõ¡·
-# È«²¿¼´²å¼´ÓÃÄ£¿é´úÂë£ºhttps://github.com/AIFengheshu/Plug-play-modules
+# è®ºæ–‡é¢˜ç›®ï¼šConv2Former: A Simple Transformer-Style ConvNet for Visual Recognition
+# ä¸­æ–‡é¢˜ç›®ï¼šConv2Former: ä¸€ç§ç®€å•çš„è§†è§‰è¯†åˆ«ç”¨çš„Transformeré£æ ¼å·ç§¯ç½‘ç»œ
+# è®ºæ–‡é“¾æ¥ï¼šhttps://arxiv.org/pdf/2211.11943
+# å®˜æ–¹githubï¼šhttps://github.com/HVision-NKU/Conv2Former
+# æ‰€å±æœºæ„ï¼šå¤©æ´¥å—å¼€å¤§å­¦è®¡ç®—æœºç§‘å­¦å­¦é™¢ï¼Œå­—èŠ‚è·³åŠ¨ï¼ˆæ–°åŠ å¡ï¼‰
+# ä»£ç æ•´ç†ï¼šå¾®ä¿¡å…¬ä¼—å·ã€ŠAIç¼åˆæœ¯ã€‹
+# å…¨éƒ¨å³æ’å³ç”¨æ¨¡å—ä»£ç ï¼šhttps://github.com/AIFengheshu/Plug-play-modules
 
 class LayerNorm(nn.Module):
     r""" LayerNorm that supports two data formats: channels_last (default) or channels_first. 
@@ -57,18 +57,18 @@ class SpatialAttention(nn.Module):
 
 if __name__ == "__main__":
 
-    # ½«Ä£¿éÒÆ¶¯µ½ GPU£¨Èç¹û¿ÉÓÃ£©
+    # å°†æ¨¡å—ç§»åŠ¨åˆ° GPUï¼ˆå¦‚æœå¯ç”¨ï¼‰
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    # ´´½¨²âÊÔÊäÈëÕÅÁ¿ (batch_size, channels, height, width)
+    # åˆ›å»ºæµ‹è¯•è¾“å…¥å¼ é‡ (batch_size, channels, height, width)
     x = torch.randn(1, 32, 256, 256).to(device)
-    # ³õÊ¼»¯ SpatialAtt Ä£¿é
+    # åˆå§‹åŒ– SpatialAtt æ¨¡å—
     SpatialAtt=SpatialAttention(dim=32, kernel_size=3)
     print(SpatialAtt)
-    print("Î¢ĞÅ¹«ÖÚºÅ:AI·ìºÏÊõ")
+    print("å¾®ä¿¡å…¬ä¼—å·:AIç¼åˆæœ¯")
     SpatialAtt = SpatialAtt.to(device)
-    # Ç°Ïò´«²¥
+    # å‰å‘ä¼ æ’­
     output = SpatialAtt(x)
     
-    # ´òÓ¡ÊäÈëºÍÊä³öÕÅÁ¿µÄĞÎ×´
-    print("ÊäÈëÕÅÁ¿ĞÎ×´:", x.shape)
-    print("Êä³öÕÅÁ¿ĞÎ×´:", output.shape)
+    # æ‰“å°è¾“å…¥å’Œè¾“å‡ºå¼ é‡çš„å½¢çŠ¶
+    print("è¾“å…¥å¼ é‡å½¢çŠ¶:", x.shape)
+    print("è¾“å‡ºå¼ é‡å½¢çŠ¶:", output.shape)
