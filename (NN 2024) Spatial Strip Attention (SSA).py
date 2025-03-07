@@ -2,13 +2,13 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-# ÂÛÎÄÌâÄ¿£ºDual-domain strip attention for image restoration
-# ÖĞÎÄÌâÄ¿£ºË«ÓòÌõ´ø×¢ÒâÁ¦ÓÃÓÚÍ¼Ïñ»Ö¸´
-# ÂÛÎÄÁ´½Ó£ºhttps://doi.org/10.1016/j.neunet.2023.12.003
-# ¹Ù·½github£ºhttps://github.com/c-yn/DSANet
-# ËùÊô»ú¹¹£º
-# µÂ¹úÄ½ÄáºÚ¹¤Òµ´óÑ§¼ÆËã¡¢ĞÅÏ¢Óë¼¼ÊõÑ§Ôº
-# ´úÂëÕûÀí£ºÎ¢ĞÅ¹«ÖÚºÅ£ºAI·ìºÏÊõ
+# è®ºæ–‡é¢˜ç›®ï¼šDual-domain strip attention for image restoration
+# ä¸­æ–‡é¢˜ç›®ï¼šåŒåŸŸæ¡å¸¦æ³¨æ„åŠ›ç”¨äºå›¾åƒæ¢å¤
+# è®ºæ–‡é“¾æ¥ï¼šhttps://doi.org/10.1016/j.neunet.2023.12.003
+# å®˜æ–¹githubï¼šhttps://github.com/c-yn/DSANet
+# æ‰€å±æœºæ„ï¼š
+# å¾·å›½æ…•å°¼é»‘å·¥ä¸šå¤§å­¦è®¡ç®—ã€ä¿¡æ¯ä¸æŠ€æœ¯å­¦é™¢
+# ä»£ç æ•´ç†ï¼šå¾®ä¿¡å…¬ä¼—å·ï¼šAIç¼åˆæœ¯
 
 # Spatial Strip Attention (SSA)
 class SSA(nn.Module):
@@ -54,25 +54,25 @@ class spatial_strip_att_unit(nn.Module):
     
 if __name__ == "__main__":
 
-    # Ä£¿é²ÎÊı
-    batch_size = 1    # Åú´óĞ¡
-    channels = 32     # ÊäÈëÌØÕ÷Í¨µÀÊı
-    height = 256      # Í¼Ïñ¸ß¶È
-    width = 256        # Í¼Ïñ¿í¶È
+    # æ¨¡å—å‚æ•°
+    batch_size = 1    # æ‰¹å¤§å°
+    channels = 32     # è¾“å…¥ç‰¹å¾é€šé“æ•°
+    height = 256      # å›¾åƒé«˜åº¦
+    width = 256        # å›¾åƒå®½åº¦
     
-    # ´´½¨ SSA Ä£¿é
+    # åˆ›å»º SSA æ¨¡å—
     ssa = SSA(dim=32, group=1, kernel=7)
     print(ssa)
-    print("Î¢ĞÅ¹«ÖÚºÅ:AI·ìºÏÊõ, nb!")
+    print("å¾®ä¿¡å…¬ä¼—å·:AIç¼åˆæœ¯, nb!")
     
-    # Éú³ÉËæ»úÊäÈëÕÅÁ¿ (batch_size, channels, height, width)
+    # ç”Ÿæˆéšæœºè¾“å…¥å¼ é‡ (batch_size, channels, height, width)
     x = torch.randn(batch_size, channels, height, width)
     
-    # ´òÓ¡ÊäÈëÕÅÁ¿µÄĞÎ×´
+    # æ‰“å°è¾“å…¥å¼ é‡çš„å½¢çŠ¶
     print("Input shape:", x.shape)
     
-    # Ç°Ïò´«²¥¼ÆËãÊä³ö
+    # å‰å‘ä¼ æ’­è®¡ç®—è¾“å‡º
     output = ssa(x)
     
-    # ´òÓ¡Êä³öÕÅÁ¿µÄĞÎ×´
+    # æ‰“å°è¾“å‡ºå¼ é‡çš„å½¢çŠ¶
     print("Output shape:", output.shape)
