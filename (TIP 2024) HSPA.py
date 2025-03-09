@@ -2,12 +2,12 @@ import torch
 import torch.nn as nn
 from torch.autograd import Function
 
-# ÂÛÎÄÌâÄ¿£ºHigh-Similarity-Pass Attention for Single Image Super-Resolution
-# ÖĞÎÄÌâÄ¿£º¸ßÏàËÆ¶È-Í¨¹ı×¢ÒâÁ¦»úÖÆµÄµ¥Í¼Ïñ³¬·Ö±æÂÊ
-# ÂÛÎÄÁ´½Ó£ºhttps://arxiv.org/pdf/2305.15768
-# ¹Ù·½github£ºhttps://github.com/laoyangui/HSPAN
-# ËùÊô»ú¹¹£º¸£Öİ´óÑ§¼ÆËã»úÓëÊı¾İ¿ÆÑ§Ñ§ÔºµÈ
-# ´úÂëÕûÀí£ºÎ¢ĞÅ¹«ÖÚºÅ£ºAI·ìºÏÊõ
+# è®ºæ–‡é¢˜ç›®ï¼šHigh-Similarity-Pass Attention for Single Image Super-Resolution
+# ä¸­æ–‡é¢˜ç›®ï¼šé«˜ç›¸ä¼¼åº¦-é€šè¿‡æ³¨æ„åŠ›æœºåˆ¶çš„å•å›¾åƒè¶…åˆ†è¾¨ç‡
+# è®ºæ–‡é“¾æ¥ï¼šhttps://arxiv.org/pdf/2305.15768
+# å®˜æ–¹githubï¼šhttps://github.com/laoyangui/HSPAN
+# æ‰€å±æœºæ„ï¼šç¦å·å¤§å­¦è®¡ç®—æœºä¸æ•°æ®ç§‘å­¦å­¦é™¢ç­‰
+# ä»£ç æ•´ç†ï¼šå¾®ä¿¡å…¬ä¼—å·ï¼šAIç¼åˆæœ¯
 
 class BasicBlock(nn.Sequential):
     def __init__(
@@ -128,20 +128,20 @@ def roll_fun(x, dim):
     return x.permute(perm)
         
 if __name__ == "__main__":
-    # Ä£¿é²ÎÊı
-    batch_size = 1    # Åú´óĞ¡
-    channels = 256     # ÊäÈëÌØÕ÷Í¨µÀÊı
-    height = 32      # Í¼Ïñ¸ß¶È
-    width = 32        # Í¼Ïñ¿í¶È
-    # ´´½¨ hspa Ä£¿é
+    # æ¨¡å—å‚æ•°
+    batch_size = 1    # æ‰¹å¤§å°
+    channels = 256     # è¾“å…¥ç‰¹å¾é€šé“æ•°
+    height = 32      # å›¾åƒé«˜åº¦
+    width = 32        # å›¾åƒå®½åº¦
+    # åˆ›å»º hspa æ¨¡å—
     hspa = HSPA(channel=256, reduction=2, res_scale=1,conv=default_conv, topk=128)
     print(hspa)
-    print("Î¢ĞÅ¹«ÖÚºÅ:AI·ìºÏÊõ, nb!")
-    # Éú³ÉËæ»úÊäÈëÕÅÁ¿ (batch_size, channels, height, width)
+    print("å¾®ä¿¡å…¬ä¼—å·:AIç¼åˆæœ¯, nb!")
+    # ç”Ÿæˆéšæœºè¾“å…¥å¼ é‡ (batch_size, channels, height, width)
     x = torch.randn(batch_size, channels, height, width)
-    # ´òÓ¡ÊäÈëÕÅÁ¿µÄĞÎ×´
+    # æ‰“å°è¾“å…¥å¼ é‡çš„å½¢çŠ¶
     print("Input shape:", x.shape)
-    # Ç°Ïò´«²¥¼ÆËãÊä³ö
+    # å‰å‘ä¼ æ’­è®¡ç®—è¾“å‡º
     output = hspa(x)
-    # ´òÓ¡Êä³öÕÅÁ¿µÄĞÎ×´
+    # æ‰“å°è¾“å‡ºå¼ é‡çš„å½¢çŠ¶
     print("Output shape:", output.shape)
