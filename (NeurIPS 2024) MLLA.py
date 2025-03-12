@@ -2,12 +2,12 @@ import torch
 import torch.nn as nn
 from timm.models.layers import DropPath, to_2tuple, trunc_normal_
 
-# ÂÛÎÄÌâÄ¿£ºDemystify Mamba in Vision: A Linear Attention Perspective
-# ÖĞÎÄÌâÄ¿£ºÔÚÊÓ¾õÖĞ½Ò¿ªÂü°ÍµÄÉñÃØÃæÉ´£ºÒ»ÖÖÏßĞÔ×¢ÒâÁ¦ÊÓ½Ç
-# ÂÛÎÄÁ´½Ó£ºhttps://arxiv.org/pdf/2405.16605
-# ¹Ù·½github£ºhttps://github.com/LeapLabTHU/MLLA
-# ËùÊô»ú¹¹£ºÇå»ª´óÑ§£¬°¢Àï°Í°Í¼¯ÍÅ
-# ´úÂëÕûÀí:Î¢ĞÅ¹«ÖÚºÅ:AI·ìºÏÊõ
+# è®ºæ–‡é¢˜ç›®ï¼šDemystify Mamba in Vision: A Linear Attention Perspective
+# ä¸­æ–‡é¢˜ç›®ï¼šåœ¨è§†è§‰ä¸­æ­å¼€æ›¼å·´çš„ç¥ç§˜é¢çº±ï¼šä¸€ç§çº¿æ€§æ³¨æ„åŠ›è§†è§’
+# è®ºæ–‡é“¾æ¥ï¼šhttps://arxiv.org/pdf/2405.16605
+# å®˜æ–¹githubï¼šhttps://github.com/LeapLabTHU/MLLA
+# æ‰€å±æœºæ„ï¼šæ¸…åå¤§å­¦ï¼Œé˜¿é‡Œå·´å·´é›†å›¢
+# ä»£ç æ•´ç†:å¾®ä¿¡å…¬ä¼—å·:AIç¼åˆæœ¯
 
 class Mlp(nn.Module):
     def __init__(self, in_features, hidden_features=None, out_features=None, act_layer=nn.GELU, drop=0.):
@@ -177,22 +177,22 @@ class MLLABlock(nn.Module):
     
     
 if __name__ == "__main__":
-    # Ä£¿é²ÎÊı
-    batch_size = 1     # Åú´óĞ¡
-    channels = 96      # ÊäÈëÌØÕ÷Í¨µÀÊı
-    height = 224        # Í¼Ïñ¸ß¶È
-    width = 224         # Í¼Ïñ¿í¶È
-    N =height * width  # ĞòÁĞ³¤¶È
+    # æ¨¡å—å‚æ•°
+    batch_size = 1     # æ‰¹å¤§å°
+    channels = 96      # è¾“å…¥ç‰¹å¾é€šé“æ•°
+    height = 224        # å›¾åƒé«˜åº¦
+    width = 224         # å›¾åƒå®½åº¦
+    N =height * width  # åºåˆ—é•¿åº¦
 
     model = MLLABlock(dim=channels, input_resolution=(height,width), num_heads=3)
     print(model)
-    print("Î¢ĞÅ¹«ÖÚºÅ:AI·ìºÏÊõ")
+    print("å¾®ä¿¡å…¬ä¼—å·:AIç¼åˆæœ¯")
 
-    # Éú³ÉËæ»úÊäÈëÕÅÁ¿ (batch_size,height*width, channels)
+    # ç”Ÿæˆéšæœºè¾“å…¥å¼ é‡ (batch_size,height*width, channels)
     x = torch.randn(batch_size, N, channels)
-    # ´òÓ¡ÊäÈëÕÅÁ¿µÄĞÎ×´
+    # æ‰“å°è¾“å…¥å¼ é‡çš„å½¢çŠ¶
     print("Input shape:", x.shape)
-    # Ç°Ïò´«²¥¼ÆËãÊä³ö
+    # å‰å‘ä¼ æ’­è®¡ç®—è¾“å‡º
     output = model(x)
-    # ´òÓ¡Êä³öÕÅÁ¿µÄĞÎ×´
+    # æ‰“å°è¾“å‡ºå¼ é‡çš„å½¢çŠ¶
     print("Output shape:", output.shape)
