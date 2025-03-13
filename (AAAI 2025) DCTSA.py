@@ -4,7 +4,7 @@ import torch.nn.functional as F
 from einops import rearrange
 from dct_filter import DCT8x8, DCT7x7, DCT3x3
 
-# ´úÂëÕûÀí£ºÎ¢ĞÅ¹«ÖÚºÅ£ºAI·ìºÏÊõ
+# ä»£ç æ•´ç†ï¼šå¾®ä¿¡å…¬ä¼—å·ï¼šAIç¼åˆæœ¯
 
 class FreConv(nn.Module):
     def __init__(self, c, reduction, k=1, p=0):
@@ -114,7 +114,7 @@ class DCTSA(nn.Module):
 
         dct_bias = torch.zeros(self.dct_c).to(dct_weight.device)
         dct_feature = F.conv2d(torch.mean(x_t, dim=1), dct_weight, dct_bias, stride=1, padding=self.p) # (b, dct_c, h, w)
-        dct_feature = self.freq_attention(dct_feature)  # £¨b, 1, h, w)
+        dct_feature = self.freq_attention(dct_feature)  # ï¼ˆb, 1, h, w)
 
         dct_feature = dct_feature.unsqueeze(1)  # (b, 1, 1, h, w)
         dct_feature = dct_feature.repeat(1, t, c, 1, 1) # (b, t, c, h, w)
@@ -127,20 +127,20 @@ class DCTSA(nn.Module):
     
 if __name__ == "__main__":
     
-    # ÉèÖÃ²âÊÔ²ÎÊı
-    T = 2  # Ê±¼ä²½³¤
-    B = 1  # Åú´Î´óĞ¡
-    C = 32  # Í¨µÀÊı
-    H = 256  # ¸ß¶È
-    W = 256  # ¿í¶È
-    # ´´½¨Ò»¸öËæ»úÊäÈëÕÅÁ¿£¬ĞÎ×´Îª (T, B, C, H, W)
+    # è®¾ç½®æµ‹è¯•å‚æ•°
+    T = 2  # æ—¶é—´æ­¥é•¿
+    B = 1  # æ‰¹æ¬¡å¤§å°
+    C = 32  # é€šé“æ•°
+    H = 256  # é«˜åº¦
+    W = 256  # å®½åº¦
+    # åˆ›å»ºä¸€ä¸ªéšæœºè¾“å…¥å¼ é‡ï¼Œå½¢çŠ¶ä¸º (T, B, C, H, W)
     x = torch.randn(T, B, C, H, W).cuda()
-    # ³õÊ¼»¯
+    # åˆå§‹åŒ–
     model = DCTSA(freq_num=9, channel=32, step=2, reduction=1, groups=1, select_method='all').cuda()
     print(model)
-    # ÔËĞĞÄ£ĞÍÇ°Ïò´«²¥
+    # è¿è¡Œæ¨¡å‹å‰å‘ä¼ æ’­
     output = model(x)
-    print("\nÎ¢ĞÅ¹«ÖÚºÅ: AI·ìºÏÊõ!\n")
-    # ´òÓ¡Êä³öµÄĞÎ×´
+    print("\nå¾®ä¿¡å…¬ä¼—å·: AIç¼åˆæœ¯!\n")
+    # æ‰“å°è¾“å‡ºçš„å½¢çŠ¶
     print(f"Input shape: {x.shape}")
     print(f"Output shape: {output.shape}")
