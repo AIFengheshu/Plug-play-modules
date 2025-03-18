@@ -1,6 +1,6 @@
 ![0 0【更多免费资源，在此获取】_00](https://github.com/user-attachments/assets/3f4393eb-1fef-4200-8110-2df8bb3f2f4b)
 
-![DeepSeeK搭配使用攻略小红书封面 (3)](https://github.com/user-attachments/assets/74c691a6-6b23-47ba-a1a4-19ed215e01ea)
+![副本_ai缝合术 (1)](https://github.com/user-attachments/assets/aee8eecc-e4d7-408d-b0b8-4cecbec23ffd)
 
 ## 最新更新请关注微信公众号【AI缝合术】
 
