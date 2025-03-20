@@ -58,6 +58,16 @@ class Mlp(nn.Module):
         x = self.drop2(x)
         return x
 
+def resize_complex_weight(origin_weight, new_h, new_w):
+    h, w, num_heads = origin_weight.shape[0:3]  # size, w, c, 2
+    origin_weight = origin_weight.reshape(1, h, w, num_heads * 2).permute(0, 3, 1, 2)
+    new_weight = torch.nn.functional.interpolate(
+        origin_weight,
+        size=(new_h, new_w),
+        mode='bicubic',
+        align_corners=True
+    ).permute(0, 2, 3, 1).reshape(new_h, new_w, num_heads, 2)
+    return new_weight
 
 class DynamicFilter(nn.Module):
     def __init__(self, dim, expansion_ratio=2, reweight_expansion_ratio=.25,
@@ -112,6 +122,8 @@ class DynamicFilter(nn.Module):
 
 if __name__ == '__main__':
     block = DynamicFilter(32, size=64)  # size==H,W
+    print(block)
+    print("微信公众号: AI缝合术!")
 
     # 若input形状为B C H W，先用下面代码变换张量形状
     input = torch.rand(3, 32, 64, 64)   # 输入 B C H W
@@ -120,4 +132,5 @@ if __name__ == '__main__':
     output = block(input_bhwc)
 
     output = output.permute(0, 3, 1, 2)  # B C H W
+    print(input.size())
     print(output.size())  # 输出的形状
