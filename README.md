@@ -2,7 +2,7 @@
 
 ![image](https://github.com/user-attachments/assets/115cb688-5eec-4f70-8148-1cae13b50b2f)
 
-[2025年即插即用代码模块与论文解读汇总)](https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzkyMTgwODg2Nw==&action=getalbum&album_id=3722797568145604615&scene=126&sessionid=1224449778#wechat_redirect)
+[2025年即插即用代码模块与论文解读汇总](https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzkyMTgwODg2Nw==&action=getalbum&album_id=3722797568145604615&scene=126&sessionid=1224449778#wechat_redirect)
 
 ![0 0【更多免费资源，在此获取】_00](https://github.com/user-attachments/assets/3f4393eb-1fef-4200-8110-2df8bb3f2f4b)
 
