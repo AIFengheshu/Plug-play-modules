@@ -1,8 +1,11 @@
-# 2025年4月将装修github仓库（预计两周左右时间），我们将重新整理已上传代码，在此期间可能部分内容消失，大家可在公众号历史推文中查找使用，装修完毕我们会发微信推文通知，重磅升级中，敬请期待！</font>*
+# 2025年4月将装修github仓库（预计两周左右时间），我们将重新整理已上传代码，在此期间可能部分内容消失，大家可在公众号历史推文中查找使用，装修完毕我们会发微信推文通知，重磅升级中，敬请期待！
+
+![image](https://github.com/user-attachments/assets/115cb688-5eec-4f70-8148-1cae13b50b2f)
+
+[2025年即插即用代码模块与论文解读汇总)](https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzkyMTgwODg2Nw==&amp=)
 
 ![0 0【更多免费资源，在此获取】_00](https://github.com/user-attachments/assets/3f4393eb-1fef-4200-8110-2df8bb3f2f4b)
 
-![副本_ai缝合术 (1)](https://github.com/user-attachments/assets/aee8eecc-e4d7-408d-b0b8-4cecbec23ffd)
 
 ## 最新更新请关注微信公众号【AI缝合术】
 
