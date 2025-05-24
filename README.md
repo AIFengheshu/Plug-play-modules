@@ -6,7 +6,7 @@
 
 ![0 0【更多免费资源，在此获取】_00](https://github.com/user-attachments/assets/3f4393eb-1fef-4200-8110-2df8bb3f2f4b)
 
-# 进阶版内容，更完整更丰富，欢迎扫码获取！
+# 进阶版VIP内容，更完整更丰富，超多2025年最新即插即用代码模块，欢迎扫码获取！
 ![image](https://github.com/user-attachments/assets/bc369a38-8410-46a2-92e1-eb6688d31454)
 
 
