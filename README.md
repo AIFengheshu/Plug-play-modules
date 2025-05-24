@@ -1,10 +1,13 @@
-# 2025年4月将装修github仓库（预计两周左右时间），我们将重新整理已上传代码，在此期间可能部分内容消失，大家可在公众号历史推文中查找使用，装修完毕我们会发微信推文通知，重磅升级中，敬请期待！
+# 2025年免费即插即用代码分享！
 
 ![image](https://github.com/user-attachments/assets/115cb688-5eec-4f70-8148-1cae13b50b2f)
 
 [2025年即插即用代码模块与论文解读汇总](https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzkyMTgwODg2Nw==&action=getalbum&album_id=3722797568145604615&scene=126&sessionid=1224449778#wechat_redirect)
 
 ![0 0【更多免费资源，在此获取】_00](https://github.com/user-attachments/assets/3f4393eb-1fef-4200-8110-2df8bb3f2f4b)
+
+# 进阶版内容，更完整更丰富，欢迎扫码获取！
+![image](https://github.com/user-attachments/assets/bc369a38-8410-46a2-92e1-eb6688d31454)
 
 
 ## 最新更新请关注微信公众号【AI缝合术】
